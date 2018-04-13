@@ -5,12 +5,16 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
   },
   mounted() {
+    axios.get('http://localhost:8085/api/')
+    .then(response => console.log(response))
+    .catch(error => console.log(error))
     var platform = new H.service.Platform({
       'app_id': 'j4o3XiGsSiUtrrUyy1jp',
       'app_code': 'rXPXKkeiuAB4YtVt1zdeqg'
