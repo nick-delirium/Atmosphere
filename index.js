@@ -5,7 +5,9 @@ const express  = require('express'),
       path     = require('path'),
       app      = express();
 
-let data = fs.readFileSync('data.json', 'utf8');
+let data    = fs.readFileSync('data.json', 'utf8');
+let markers = fs.readFileSync('markers.json', 'utf8');
+
 
 app.use(compress());
 
@@ -14,7 +16,14 @@ app.get('/api', (req, res) => {
         status: 200,
         message: 'Hello',
         data: data
-    }
+    };
+    res.send(json);
+});
+app.get('/api/markers', (req, res) => {
+    let json = {
+        status: 200,
+        data: markers
+    };
     res.send(json);
 })
 
