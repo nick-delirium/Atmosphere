@@ -25,7 +25,7 @@
 
 <script>
 import axios from 'axios';
-import * as jsn from '../assets/';
+import * as jsn from '../assets/saint-petersburg.json';
 export default {
   name: 'MapAndInfo',
   data() {
@@ -159,8 +159,13 @@ mounted() {
             coGroup.addObject(circle);
             
           };
-          debugger;
-          var reader = new H.data.geojson.Reader('./json/saint-petersburg.json');
+          // console.log(jsn)
+          // debugger;
+          var reader = new H.data.geojson.Reader('https://raw.githubusercontent.com/sylenien/megahack/master/src/assets/saint-petersburg.json', {
+            style: {fillColor:'#191919'}});
+          // let layer = new Geojson(jsn);
+          // map.addObject(layer)
+
           reader.parse();
           // Assumption: map already exists
           map.addLayer(reader.getLayer());

@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './assets/plugin.css'
 import Button from  './assets/plugin.js'
+import Geojson from './assets/parser.js'
 
 // Vue.use(Button)
 
