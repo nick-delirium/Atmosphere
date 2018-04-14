@@ -5,8 +5,13 @@
         <div style=" height: 600px" id="mapContainer"></div>
         </div>
       <div class='col-md-4'>
-        <div class='bubble'>x</div>
-        <div class="bubble">x</div>
+        <div class='bubble b-top'>
+          <h4>Средние значения</h4>
+          <p>Много текста</p>
+        </div>
+        <div class="bubble b-bottom">
+          <h4>Данные о районе</h4> 
+          <p>Не очень много текста</p></div>
       </div>
       
     </div>
@@ -115,22 +120,22 @@ mounted() {
         //getData(function(query){
           
           let pollution = query;
-          console.log(pollution);
+          let koef = 2000;
           for(let i = 0; i < pollution.length; i++){
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].no2)*1000, {style: no2});
+            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].no2)*koef, {style: no2});
 
             no2Group.addObject(circle);
 
-            console.log(pollution);
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].no)*1000, {style: no});
+            
+            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].no)*koef, {style: no});
 
             noGroup.addObject(circle);
 
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].so2)*1000, {style: so2});
+            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].so2)*koef, {style: so2});
 
             so2Group.addObject(circle);
 
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].co)*1000, {style: co});
+            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].co)*koef, {style: co});
 
             coGroup.addObject(circle);
             
@@ -172,5 +177,23 @@ a {
 .H_rdo_buttons .H_active, .H_rdo li.H_active {
     background: #4A5B65;
     border-radius: 0em;
+}
+.bubble{
+  padding: 15px 15px 15px;
+  border-radius: 15px;
+  border: 1px solid #4A5B65;
+  background-color: #f7f7f7;
+  margin-bottom: 30px;
+  transition: all .2s ease-in-out;
+  box-shadow: 0 0 20px rgba(0,0,0,.4);
+}
+@media (max-width: 900px){
+  .b-top{
+    margin-top: 30px;
+  }
+}
+.bubble:hover{
+  background-color: #f0f0f0;
+  box-shadow: 0 0 20px rgba(0,0,0,.6);
 }
 </style>
