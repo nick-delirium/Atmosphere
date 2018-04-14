@@ -84,10 +84,15 @@ mounted() {
         var mapSettings = ui.getControl('mapsettings');
         var zoom = ui.getControl('zoom');
         var scalebar = ui.getControl('scalebar');
-          
+        // var panorama = ui.getControl('panorama');
+        const button = new Button();
+        button.setAlignment('top-left');
+        ui.addControl('button',button)
+        
         mapSettings.setAlignment('top-right');
         zoom.setAlignment('middle-right');
         scalebar.setAlignment('top-right');	
+        // panorama.setAlignment('top-left');
 
         //style
         var no2 = {
@@ -154,12 +159,15 @@ mounted() {
             coGroup.addObject(circle);
             
           };
-          console.log(PolyStyle)
-          // checkboxes
-          // noGroup.setVisibility(false);
-          // // so2Group.setVisibility(false);
-          // no2Group.setVisibility(false);
-          // coGroup.setVisibility(false);
+          debugger;
+          var reader = new H.data.geojson.Reader('./json/saint-petersburg.json');
+          reader.parse();
+          // Assumption: map already exists
+          map.addLayer(reader.getLayer());
+
+          // 'saint-petersburg.json'
+
+       // }, urlPollution);
   }
 )}
 }
