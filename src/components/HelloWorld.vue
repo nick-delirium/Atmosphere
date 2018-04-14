@@ -20,18 +20,8 @@ export default {
     axios.get('http://localhost:8085/api/markers')
     .then(response => {
       this.markers = response.data.data;
-<<<<<<< HEAD
-      
-    })
-    .catch(error => console.log(error))
-    
-      function moveMapToBerlin(map, coords){
-        console.log(coords)
-        map.setCenter({lat: coords.loc.lt, lng: coords.loc.ln});
-=======
       function moveMapToBerlin(map, coords){
         map.setCenter({lat: coords[0].loc.lt, lng: coords[0].loc.ln});
->>>>>>> c56ab503c5da4ba23e611640a089fe292e638d1d
         map.setZoom(10);
       }
 
