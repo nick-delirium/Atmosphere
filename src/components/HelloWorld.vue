@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <div style="width: 640px; height: 480px" id="mapContainer"></div>
+    <div style="width: 800px; height: 480px" id="mapContainer"></div>
   </div>
 </template>
 
@@ -20,34 +20,35 @@ export default {
     axios.get('http://localhost:8085/api/markers')
     .then(response => {
       this.markers = response.data.data;
-      function moveMapToBerlin(map, coords){
+      function moveToStP(map, coords){
+        
         map.setCenter({lat: coords[0].loc.lt, lng: coords[0].loc.ln});
         map.setZoom(10);
       }
       //Step 1: initialize communication with the platform
-      var platform = new H.service.Platform({
+      let platform = new H.service.Platform({
         app_id: 'j4o3XiGsSiUtrrUyy1jp',
         app_code: 'rXPXKkeiuAB4YtVt1zdeqg',
         useCIT: true,
         // useHTTPS: true
       });
-      var defaultLayers = platform.createDefaultLayers();
+      let defaultLayers = platform.createDefaultLayers();
 
       //Step 2: initialize a map  - not specificing a location will give a whole world view.
-      var map = new H.Map(document.getElementById('mapContainer'),
+      let map = new H.Map(document.getElementById('mapContainer'),
         defaultLayers.normal.map);
 
       //Step 3: make the map interactive
       // MapEvents enables the event system
       // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
-      var mapEvents = new H.mapevents.MapEvents(map);
-      var behavior = new H.mapevents.Behavior(mapEvents);
+      let mapEvents = new H.mapevents.MapEvents(map);
+      let behavior = new H.mapevents.Behavior(mapEvents);
 
       // Create the default UI components
-      var ui = H.ui.UI.createDefault(map, defaultLayers);
+      let ui = H.ui.UI.createDefault(map, defaultLayers);
 
       // Now use the map as required...
-      moveMapToBerlin(map, this.markers);
+      moveToStP(map, this.markers);
 
       //console.log(this);
       let coords = {}, marker = [0], geomarker = [0];
@@ -66,9 +67,26 @@ export default {
      }
 
      console.log(linestring);
-      var polygon = new H.map.Polygon(linestring);
+      var polygon = new H.map.Polygon(linestring, {
+      style: {
+        strokeColor: '#05A',
+        fillColor: 'rgba(0, 240, 190, 0.4)',
+        lineWidth: 1,
+        lineCap: 'round',
+        lineJoin: 'miter',
+        miterLimit: 10,
+        lineDash: [ ],
+        lineDashOffset: 0
+        }
+      }
+);
       map.addObject(polygon);
-      console.log(marker)
+      //     style: {
+      //       fillColor: '#FFFFCC',
+      //       strokeColor: '#829',
+      //       lineWidth: 8
+      //     }
+
     })
     .catch(error => console.log(error))
     
