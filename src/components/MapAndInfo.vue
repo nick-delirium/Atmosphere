@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import * as jsn from '../assets/';
 export default {
   name: 'MapAndInfo',
   data() {
@@ -88,37 +89,25 @@ mounted() {
         zoom.setAlignment('middle-right');
         scalebar.setAlignment('top-right');	
 
-        //parse Json
-        function getData(ready, url){
-          var request = new XMLHttpRequest();
-          request.open('GET', url, true);
-          request.onreadystatechange = function(){
-            if(this.readyState == 4 && this.status !=404) {
-              ready(this.responseText);
-            }
-          }
-          request.send();
-        };
-
         //style
         var no2 = {
-          strokeColor: 'rgba(0, 229, 255, 0)',
+          strokeColor: 'rgba(0, 229, 255, 0.1)',
           fillColor: 'rgba(244,67,54, 0.6)'
         };
 
         var no = {
-          strokeColor: 'rgba(0, 229, 255, 0)',
+          strokeColor: 'rgba(0, 229, 255, 0.1)',
           fillColor: 'rgba(156,39,176, 0.6)'
         };
 
         var so2 = {
-          strokeColor: 'rgba(0, 229, 255, 0)',
+          strokeColor: 'rgba(0, 229, 255, 0.1)',
           fillColor: 'rgba(33,150,243, 0.6)'
         };
 
         var co = {
-          strokeColor: 'rgba(0, 229, 255, 0)',
-          fillColor: 'rgba(205,220,57)'
+          strokeColor: 'rgba(0, 229, 255, 0.1)',
+          fillColor: 'rgba(205,220,57, 0.6)'
         };
 
         //utl to JSON
@@ -136,32 +125,41 @@ mounted() {
 
         var coGroup = new H.map.Group();
         map.addObject(coGroup);
-        //get json and add circle on croup
-        //getData(function(query){
           
           let pollution = query;
-          let koef = 2000;
+          let PolyStyle = [];
+          let koef = 1500; // circle radius multiplier
           for(let i = 0; i < pollution.length; i++){
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].no2)*koef, {style: no2});
+            PolyStyle[i] = {
+              no2: parseFloat(pollution[i].no2.replace(/,/, '.')) > 0.5 ? parseFloat(pollution[i].no2.replace(/,/, '.')) > 1 ? "red" : "yellow" : "green",
+              no: parseFloat(pollution[i].no.replace(/,/, '.')) > 0.5 ? parseFloat(pollution[i].no.replace(/,/, '.')) > 1 ? "red" : "yellow" : "green",
+              so2: parseFloat(pollution[i].so2.replace(/,/, '.')) > 0.5 ? parseFloat(pollution[i].so2.replace(/,/, '.')) > 1 ? "red" : "yellow" : "green",
+              co: parseFloat(pollution[i].co.replace(/,/, '.')) > 0.5 ? parseFloat(pollution[i].co.replace(/,/, '.')) > 1 ? "red" : "yellow" : "green"
+            }
+            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseFloat(pollution[i].no2.replace(/,/, '.'))*koef, {style: no2});
 
             no2Group.addObject(circle);
 
             
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].no)*koef, {style: no});
+            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseFloat(pollution[i].no.replace(/,/, '.'))*koef, {style: no});
 
             noGroup.addObject(circle);
 
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].so2)*koef, {style: so2});
+            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseFloat(pollution[i].so2.replace(/,/, '.'))*koef, {style: so2});
 
             so2Group.addObject(circle);
 
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].co)*koef, {style: co});
+            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseFloat(pollution[i].co.replace(/,/, '.'))*koef, {style: co});
 
             coGroup.addObject(circle);
             
           };
-
-       // }, urlPollution);
+          console.log(PolyStyle)
+          // checkboxes
+          // noGroup.setVisibility(false);
+          // // so2Group.setVisibility(false);
+          // no2Group.setVisibility(false);
+          // coGroup.setVisibility(false);
   }
 )}
 }
