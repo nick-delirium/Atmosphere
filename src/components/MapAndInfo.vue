@@ -125,22 +125,7 @@ mounted() {
         var coGroup = new H.map.Group();
         map.addObject(coGroup);
 
-        //groups buttons 
-        const buttonNo = new Button('NO');
-        buttonNo.setAlignment('top-left');
-        ui.addControl('buttonNo',buttonNo);
         
-        const buttonSo2 = new Button('SO2');
-        buttonSo2.setAlignment('top-left');
-        ui.addControl('buttonSo2',buttonSo2);
-        
-        const buttonNo2 = new Button('NO2');
-        buttonNo2.setAlignment('top-left');
-        ui.addControl('buttonNo2',buttonNo2);
-        
-        const buttonCo = new Button('CO');
-        buttonCo.setAlignment('top-left');
-        ui.addControl('buttonCo',buttonCo);
           
           let pollution = query;
           let PolyStyle = [];
@@ -170,6 +155,82 @@ mounted() {
             coGroup.addObject(circle);
             
           };
+          //groups buttons 
+          const buttonNo = new Button('NO', 'NO');
+          buttonNo.setAlignment('top-left');
+          ui.addControl('buttonNo',buttonNo);
+          document.querySelector('.NO').addEventListener('click', () => {
+            document.querySelector('.SO2').classList.remove('dl-button-active');
+            document.querySelector('.NO2').classList.remove('dl-button-active');
+            document.querySelector('.NO').classList.add('dl-button-active');
+            document.querySelector('.CO').classList.remove('dl-button-active');
+            document.querySelector('.All').classList.remove('dl-button-active');
+            no2Group.setVisibility(false);
+            so2Group.setVisibility(false);
+            coGroup.setVisibility(false);
+            noGroup.setVisibility(true);
+          });
+
+          const buttonSo2 = new Button('SO2', 'SO2');
+          buttonSo2.setAlignment('top-left');
+          ui.addControl('buttonSo2',buttonSo2);
+          document.querySelector('.SO2').addEventListener('click', () => {
+            document.querySelector('.SO2').classList.add('dl-button-active');
+            document.querySelector('.NO2').classList.remove('dl-button-active');
+            document.querySelector('.NO').classList.remove('dl-button-active');
+            document.querySelector('.CO').classList.remove('dl-button-active');
+            document.querySelector('.All').classList.remove('dl-button-active');
+            no2Group.setVisibility(false);
+            so2Group.setVisibility(true);
+            coGroup.setVisibility(false);
+            noGroup.setVisibility(false);
+          })
+
+          const buttonNo2 = new Button('NO2', 'NO2');
+          buttonNo2.setAlignment('top-left');
+          ui.addControl('buttonNo2',buttonNo2);
+          document.querySelector('.NO2').addEventListener('click', () => {
+            document.querySelector('.SO2').classList.remove('dl-button-active');
+            document.querySelector('.NO2').classList.add('dl-button-active');
+            document.querySelector('.NO').classList.remove('dl-button-active');
+            document.querySelector('.CO').classList.remove('dl-button-active');
+            document.querySelector('.All').classList.remove('dl-button-active');
+            no2Group.setVisibility(true);
+            so2Group.setVisibility(false);
+            coGroup.setVisibility(false);
+            noGroup.setVisibility(false);
+          })
+
+          const buttonCo = new Button('CO', 'CO');
+          buttonCo.setAlignment('top-left');
+          ui.addControl('buttonCo',buttonCo);
+          document.querySelector('.CO').addEventListener('click', () => {
+            document.querySelector('.SO2').classList.remove('dl-button-active');
+            document.querySelector('.NO2').classList.remove('dl-button-active');
+            document.querySelector('.NO').classList.remove('dl-button-active');
+            document.querySelector('.CO').classList.add('dl-button-active');
+            document.querySelector('.All').classList.remove('dl-button-active');
+            no2Group.setVisibility(false);
+            so2Group.setVisibility(false);
+            coGroup.setVisibility(true);
+            noGroup.setVisibility(false);
+          });
+
+          const buttonAll = new Button('All', 'All');
+          buttonCo.setAlignment('top-left');
+          ui.addControl('buttonAll',buttonAll);
+          document.querySelector('.All').addEventListener('click', () => {
+            document.querySelector('.SO2').classList.add('dl-button-active');
+            document.querySelector('.NO2').classList.add('dl-button-active');
+            document.querySelector('.NO').classList.add('dl-button-active');
+            document.querySelector('.CO').classList.add('dl-button-active');
+            document.querySelector('.All').classList.add('dl-button-active');
+            no2Group.setVisibility(true);
+            so2Group.setVisibility(true);
+            coGroup.setVisibility(true);
+            noGroup.setVisibility(true);
+          })
+
           var reader = new H.data.geojson.Reader('https://raw.githubusercontent.com/sylenien/megahack/master/src/assets/saint-petersburg.json', {
             style: {
               fillColor:'black'
@@ -239,5 +300,8 @@ a {
 }
 .alert{
   color: red
+}
+.dl-button-active {
+  box-shadow: 0px 0px 5px 3px #65cfb7;
 }
 </style>
