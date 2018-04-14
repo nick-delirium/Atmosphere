@@ -52,10 +52,14 @@ export default {
       moveMapToBerlin(map, this.markers);
 
       //console.log(this);
-      let coords = {lat: this.markers[1].loc.lt, lng: this.markers[1].loc.ln},
-      marker = new H.map.Marker(coords);
-      console.log(coords)
-      map.addObject(marker);
+      let coords = {}, marker = [0];
+      for(let i = 1; i < this.markers.length; i++) {
+        coords = {lat: this.markers[i].loc.lt, lng: this.markers[i].loc.ln},
+        marker[i] = new H.map.Marker(coords);
+        console.log(coords)
+        map.addObject(marker[i]);
+      }
+      console.log(marker)
     })
     .catch(error => console.log(error))
     
