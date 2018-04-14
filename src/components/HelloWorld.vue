@@ -11,26 +11,56 @@ export default {
   props: {
     msg: String
   },
+  data() {
+    return{
+      "markers": {}
+    }
+  },
   mounted() {
-    axios.get('http://localhost:8085/api/')
-    .then(response => console.log(response))
+    axios.get('http://localhost:8085/api/markers')
+    .then(response => {
+      this.markers = response.data.data;
+      let c = this.markers;
+      console.log(c, c["loc"])
+    })
     .catch(error => console.log(error))
-    var platform = new H.service.Platform({
-      'app_id': 'j4o3XiGsSiUtrrUyy1jp',
-      'app_code': 'rXPXKkeiuAB4YtVt1zdeqg'
-      });
     
-      // Obtain the default map types from the platform object
-      var maptypes = platform.createDefaultLayers();
+      function moveMapToBerlin(map, coords){
+        map.setCenter({lat: 0, lng: 0});
+        map.setZoom(1);
+      }
 
-      // Instantiate (and display) a map object:
-      var map = new H.Map(
-      document.getElementById('mapContainer'),
-      maptypes.normal.map,
-      {
-      zoom: 10,
-      center: { lng: 13.4, lat: 52.51 }
+
+      //Step 1: initialize communication with the platform
+      var platform = new H.service.Platform({
+        app_id: 'j4o3XiGsSiUtrrUyy1jp',
+        app_code: 'rXPXKkeiuAB4YtVt1zdeqg',
+        useCIT: true,
+        // useHTTPS: true
       });
+      var defaultLayers = platform.createDefaultLayers();
+
+      //Step 2: initialize a map  - not specificing a location will give a whole world view.
+      var map = new H.Map(document.getElementById('mapContainer'),
+        defaultLayers.normal.map);
+
+      //Step 3: make the map interactive
+      // MapEvents enables the event system
+      // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+      var mapEvents = new H.mapevents.MapEvents(map);
+      var behavior = new H.mapevents.Behavior(mapEvents);
+
+      // Create the default UI components
+      var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+      // Now use the map as required...
+      moveMapToBerlin(map, this.markers);
+
+      //console.log(this);
+      let coords = {lat: this.markers.loc.lt, lng: this.markers.loc.ln},
+      marker = new H.map.Marker(coords);
+      console.log(coords)
+      map.addObject(marker);
   }
 }
 </script>
