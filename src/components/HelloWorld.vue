@@ -20,6 +20,7 @@ export default {
     axios.get('http://localhost:8085/api/markers')
     .then(response => {
       this.markers = response.data.data;
+<<<<<<< HEAD
       
     })
     .catch(error => console.log(error))
@@ -27,6 +28,10 @@ export default {
       function moveMapToBerlin(map, coords){
         console.log(coords)
         map.setCenter({lat: coords.loc.lt, lng: coords.loc.ln});
+=======
+      function moveMapToBerlin(map, coords){
+        map.setCenter({lat: coords[0].loc.lt, lng: coords[0].loc.ln});
+>>>>>>> c56ab503c5da4ba23e611640a089fe292e638d1d
         map.setZoom(10);
       }
 
@@ -57,10 +62,14 @@ export default {
       moveMapToBerlin(map, this.markers.loc);
 
       //console.log(this);
-      let coords = {lat: this.markers.loc.lt, lng: this.markers.loc.ln},
+      let coords = {lat: this.markers[1].loc.lt, lng: this.markers[1].loc.ln},
       marker = new H.map.Marker(coords);
       console.log(coords)
       map.addObject(marker);
+    })
+    .catch(error => console.log(error))
+    
+      
   }
 }
 </script>

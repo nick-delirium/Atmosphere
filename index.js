@@ -13,7 +13,7 @@ app.use(compress());
 
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "http://localhost:8082");
+    res.header("Access-Control-Allow-Origin", "http://localhost:8080");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
   });
@@ -28,8 +28,8 @@ app.get('/api', (req, res) => {
 });
 app.get('/api/markers', (req, res) => {
     let json = {
-        status: 200,
-        data: markers
+        "status": 200,
+        "data": markers
     };
     res.send(json);
 })
