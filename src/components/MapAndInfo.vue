@@ -35,7 +35,6 @@ export default {
       "median": {"co":0, "no":0, "no2":0, "so2":0}
     }
   },
-
 mounted() {
     axios.get('http://localhost:8085/api/toxic')
     .then(response => {
@@ -84,15 +83,10 @@ mounted() {
         var mapSettings = ui.getControl('mapsettings');
         var zoom = ui.getControl('zoom');
         var scalebar = ui.getControl('scalebar');
-        // var panorama = ui.getControl('panorama');
-        const button = new Button();
-        button.setAlignment('top-left');
-        ui.addControl('button',button)
         
         mapSettings.setAlignment('top-right');
         zoom.setAlignment('middle-right');
-        scalebar.setAlignment('top-right');	
-        // panorama.setAlignment('top-left');
+        scalebar.setAlignment('top-right');
 
         //style
         var no2 = {
@@ -130,6 +124,23 @@ mounted() {
 
         var coGroup = new H.map.Group();
         map.addObject(coGroup);
+
+        //groups buttons 
+        const buttonNo = new Button('NO');
+        buttonNo.setAlignment('top-left');
+        ui.addControl('buttonNo',buttonNo);
+        
+        const buttonSo2 = new Button('SO2');
+        buttonSo2.setAlignment('top-left');
+        ui.addControl('buttonSo2',buttonSo2);
+        
+        const buttonNo2 = new Button('NO2');
+        buttonNo2.setAlignment('top-left');
+        ui.addControl('buttonNo2',buttonNo2);
+        
+        const buttonCo = new Button('CO');
+        buttonCo.setAlignment('top-left');
+        ui.addControl('buttonCo',buttonCo);
           
           let pollution = query;
           let PolyStyle = [];
