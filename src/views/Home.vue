@@ -1,19 +1,19 @@
 <template>
   <div class="home">
-    <h3 style='margin-top:20px;'>St.Petersburg's polution map</h3>
+    <h3 style='margin-top:20px;'>Карта загрязнений Санкт-Петербурга</h3>
     <hr class='Hr'>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <MapCont />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import MapCont from '@/components/MapAndInfo.vue'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    MapCont
   }
 }
 </script>
