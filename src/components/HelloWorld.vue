@@ -1,6 +1,15 @@
 <template>
   <div class="hello">
-    <div style="width: 800px; height: 480px" id="mapContainer"></div>
+    <div class='row'>
+      <div class='col-md-8' style='background-color:grey;'>
+        <div style="width: 800px; height: 600px" id="mapContainer"></div>
+        </div>
+      <div class='col-md-4'>
+        <div class='bubble'>x</div>
+        <div class="bubble">x</div>
+      </div>
+      
+    </div>
   </div>
 </template>
 
