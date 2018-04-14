@@ -159,13 +159,12 @@ mounted() {
             coGroup.addObject(circle);
             
           };
-          // console.log(jsn)
-          // debugger;
           var reader = new H.data.geojson.Reader('https://raw.githubusercontent.com/sylenien/megahack/master/src/assets/saint-petersburg.json', {
-            style: {fillColor:'#191919'}});
-          // let layer = new Geojson(jsn);
-          // map.addObject(layer)
-
+            style: {
+              fillColor:'black'
+              }
+          });
+          
           reader.parse();
           // Assumption: map already exists
           map.addLayer(reader.getLayer());
