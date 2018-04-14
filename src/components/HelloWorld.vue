@@ -49,7 +49,7 @@ export default {
       var ui = H.ui.UI.createDefault(map, defaultLayers);
 
       // Now use the map as required...
-      moveMapToBerlin(map, this.markers);
+      moveMapToBerlin(map, this.markers.loc);
 
       //console.log(this);
       let coords = {}, marker = [0];
