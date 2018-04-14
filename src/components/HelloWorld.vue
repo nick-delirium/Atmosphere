@@ -20,14 +20,14 @@ export default {
     axios.get('http://localhost:8085/api/markers')
     .then(response => {
       this.markers = response.data.data;
-      let c = this.markers;
-      console.log(c, c["loc"])
+      
     })
     .catch(error => console.log(error))
     
       function moveMapToBerlin(map, coords){
-        map.setCenter({lat: 0, lng: 0});
-        map.setZoom(1);
+        console.log(coords)
+        map.setCenter({lat: coords.loc.lt, lng: coords.loc.ln});
+        map.setZoom(10);
       }
 
 
@@ -54,7 +54,7 @@ export default {
       var ui = H.ui.UI.createDefault(map, defaultLayers);
 
       // Now use the map as required...
-      moveMapToBerlin(map, this.markers);
+      moveMapToBerlin(map, this.markers.loc);
 
       //console.log(this);
       let coords = {lat: this.markers.loc.lt, lng: this.markers.loc.ln},
