@@ -6,6 +6,8 @@
 
 <script>
 import axios from 'axios'
+
+
 export default {
   name: 'HelloWorld',
   props: {
@@ -16,21 +18,43 @@ export default {
     .then(response => console.log(response))
     .catch(error => console.log(error))
     var platform = new H.service.Platform({
-      'app_id': 'j4o3XiGsSiUtrrUyy1jp',
-      'app_code': 'rXPXKkeiuAB4YtVt1zdeqg'
+      app_id: 'j4o3XiGsSiUtrrUyy1jp',
+      app_code: 'rXPXKkeiuAB4YtVt1zdeqg',
+      useCIT: true,
+      
       });
-    
-      // Obtain the default map types from the platform object
-      var maptypes = platform.createDefaultLayers();
+      
+    function moveMapToBerlin(map){
+  map.setCenter({lat:52.5159, lng:13.3777});
+  map.setZoom(14);
+}
 
-      // Instantiate (and display) a map object:
-      var map = new H.Map(
-      document.getElementById('mapContainer'),
-      maptypes.normal.map,
-      {
-      zoom: 10,
-      center: { lng: 13.4, lat: 52.51 }
-      });
+
+
+
+
+/**
+ * Boilerplate map initialization code starts below:
+ */
+
+//Step 1: initialize communication with the platform
+
+var defaultLayers = platform.createDefaultLayers();
+
+//Step 2: initialize a map  - not specificing a location will give a whole world view.
+var map = new H.Map(document.getElementById('mapContainer'),
+  defaultLayers.normal.map);
+
+//Step 3: make the map interactive
+// MapEvents enables the event system
+// Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+// Create the default UI components
+var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+// Now use the map as required...
+moveMapToBerlin(map);
   }
 }
 </script>
