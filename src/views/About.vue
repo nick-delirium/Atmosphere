@@ -1,5 +1,6 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h3 style='margin-top:20px;'>News about ecology of our city</h3>
+    <hr class='Hr'>
   </div>
 </template>
