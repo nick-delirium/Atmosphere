@@ -38,6 +38,9 @@
 #nav a.router-link-exact-active {
   color: #26ca7f;
 }
+.row {
+  margin: 0!important
+}
 .Hr{
     left: 50%;
     z-index: 1;
@@ -49,5 +52,6 @@
     text-align: center;
     position: relative;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(52,58,64,1), rgba(0, 0, 0, 0));
+    margin-bottom: 40px;
   }
 </style>

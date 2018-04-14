@@ -1,8 +1,8 @@
 <template>
-  <div class="hello">
+  <div class="hello" style='margin: 0 20px'>
     <div class='row'>
-      <div class='col-md-8' style='background-color:grey;'>
-        <div style="width: 800px; height: 600px" id="mapContainer"></div>
+      <div class='col-md-8' style='background-color:grey; padding:0!important'>
+        <div style=" height: 600px" id="mapContainer"></div>
         </div>
       <div class='col-md-4'>
         <div class='bubble'>x</div>
@@ -31,12 +31,7 @@ mounted() {
     axios.get('http://localhost:8085/api/toxic')
     .then(response => {
       this.toxics = response.data;
-      var query = response.data;      
-      console.log(query);
-      // console.log(this.toxics);
-      //console.log(this.toxics);
-      (function () {
-        'use strict';
+      var query = response.data;
         var platform = new H.service.Platform({
           'app_id': 'xxkQMf84Rb3cKA0fF8Du',
           'app_code': '3oHkXZJOAtM3jtOvDuGd0g' 
@@ -117,11 +112,11 @@ mounted() {
         var coGroup = new H.map.Group();
         map.addObject(coGroup);
         //get json and add circle on croup
-        //console.log("aaaaaaaaaa", JSON.parse(query, ''));
         //getData(function(query){
-          pollution = JSON.parse(query, '');
+          
+          let pollution = query;
           console.log(pollution);
-          for(i = 0; i < pollution.length; i++){
+          for(let i = 0; i < pollution.length; i++){
             var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseInt(pollution[i].no2)*1000, {style: no2});
 
             no2Group.addObject(circle);
@@ -142,8 +137,6 @@ mounted() {
           };
 
        // }, urlPollution);
-      })
-      ()
   }
 )}
 }
@@ -151,7 +144,7 @@ mounted() {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 h3 {
   margin: 40px 0 0;
 }
@@ -165,5 +158,19 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.H_overlay{
+  padding-left: 0px;
+  padding-right: 0px;
+  text-transform: lowercase;
+}
+.H_overlay div{
+  text-transform: capitalize;
+}
+
+.H_rdo_buttons .H_active, .H_rdo li.H_active {
+    background: #4A5B65;
+    border-radius: 0em;
 }
 </style>
