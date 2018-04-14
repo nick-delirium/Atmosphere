@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
 export default {
   name: 'MapAndInfo',
   data() {
@@ -83,10 +83,15 @@ mounted() {
         var mapSettings = ui.getControl('mapsettings');
         var zoom = ui.getControl('zoom');
         var scalebar = ui.getControl('scalebar');
-          
+        // var panorama = ui.getControl('panorama');
+        const button = new Button();
+        button.setAlignment('top-left');
+        ui.addControl('button',button)
+        
         mapSettings.setAlignment('top-right');
         zoom.setAlignment('middle-right');
         scalebar.setAlignment('top-right');	
+        // panorama.setAlignment('top-left');
 
         //parse Json
         function getData(ready, url){
@@ -160,6 +165,13 @@ mounted() {
             coGroup.addObject(circle);
             
           };
+          debugger;
+          var reader = new H.data.geojson.Reader('./json/saint-petersburg.json');
+          reader.parse();
+          // Assumption: map already exists
+          map.addLayer(reader.getLayer());
+
+          // 'saint-petersburg.json'
 
        // }, urlPollution);
   }

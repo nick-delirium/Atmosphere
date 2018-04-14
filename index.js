@@ -26,6 +26,7 @@ textract.fromFileWithPath('./2018-04-13.txt', function( error, text ) {
     }
 })
 
+app.use(express.static(path.resolve(__dirname, './dist/')))
 app.use(compress());
 
 
@@ -56,5 +57,7 @@ app.get('/api/toxic', (req, res) => {
     res.send(json);
 })
 
-
+app.get('/', (req, res) => {
+    res.sendFile(path.resolve(__dirname, './dist/index.html'))
+})
 app.listen(8085, () => console.log('server is live @8085'))
