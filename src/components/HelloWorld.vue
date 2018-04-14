@@ -53,24 +53,45 @@ export default {
       moveToStP(map, this.markers);
 
       //console.log(this);
-      let coords = {}, marker = [0], geomarker = [0];
+      let coords = {}, marker = [], geomarker = [];
       for(let i = 1; i < this.markers.length; i++) {
         coords = {lat: this.markers[i].loc.lt, lng: this.markers[i].loc.ln},
-        marker[i] = new H.map.Marker(coords)
-        marker[i].addEventListener('tap', function (evt) {
+        // data = {},
+        marker[i] = new H.map.Marker(coords, {listeners: {
+          tap: function (evt) {
             console.log("AAAAAAAAAAAAAAA")
-        })
-        marker[i].addEventListener('pointerenter', function (evt) {
+          },
+          pointerenter: function (evt) {
             console.log("HEHEHEHEHE");
             console.log(evt.target);
             var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+              content: "fufufuf" 
+            })
+          }
+        }
+        })
+        
+        
+        
+        // marker[i].addEventListener('dbltap', function (evt) {
+        //     console.log("AAAAAAAAAAAAAAA");
+        //     console.log(evt.target.b); //.target.getData());
+        //     // map.setZoom(20);
+        //     map.setCenter(evt.target.b);
+        // })
+        marker[i].addEventListener('tap', function (evt) {
+            // window.setTimeout(300);
+            console.log("HEHEHEHEHE");
+            console.log(evt.target);
+            marker[i].bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
             content: "fufufuf" 
             //evt.target.getData()
           });
-          ui.addBubble(bubble);
-          }
-        )
-        //pointerleave
+          map.setZoom(16);
+          map.setCenter(evt.target.b);
+          ui.addBubble(marker[i].bubble);
+          });
+        
         
         
         geomarker[i] = new H.geo.Point(this.markers[i].loc.lt, this.markers[i].loc.ln);
