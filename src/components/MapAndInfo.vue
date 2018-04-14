@@ -7,11 +7,11 @@
       <div class='col-md-4'>
         <div class='bubble b-top'>
           <h4>Средние значения по ЛО</h4>
-          <ul>
-            <li>CO ПДК {{median.co.toFixed(3)}}</li> <br>
-            <li>NO ПДК {{median.no.toFixed(3)}}</li> <br>
-            <li>NO2 ПДК {{median.no2.toFixed(3)}}</li> <br>
-            <li>SO2 ПДК {{median.so2.toFixed(3)}}</li> <br>
+          <ul class='text-left'>
+            <li>CO ПДК {{median.co.toFixed(3)}} <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
+            <li>NO ПДК {{median.no.toFixed(3)}} <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
+            <li>NO<i><sub>2</sub></i> ПДК {{median.no2.toFixed(3)}} <span v-if="median.no2>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
+            <li>SO<i><sub>2</sub></i> ПДК {{median.so2.toFixed(3)}} <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
           </ul>
         </div>
         <div class="bubble b-bottom">
@@ -26,10 +26,7 @@
 <script>
 import axios from 'axios'
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  },
+  name: 'MapAndInfo',
   data() {
     return{
       "markers": {},
@@ -218,5 +215,8 @@ a {
 .bubble:hover{
   background-color: #f0f0f0;
   box-shadow: 0 0 20px rgba(0,0,0,.6);
+}
+.alert{
+  color: red
 }
 </style>
