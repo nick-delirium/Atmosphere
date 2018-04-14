@@ -12,7 +12,8 @@ let markers = JSON.parse(fs.readFileSync('markers.json', 'utf8'));
 let districs = JSON.parse(fs.readFileSync('toxic.json', 'utf8'));
 let reg, parts = [];
 
-textract.fromFileWithPath('./2018-04-13.doc', function( error, text ) {
+textract.fromFileWithPath('./2018-04-13.txt', function( error, text ) {
+    // console.log(error);
     for(let i = 0; i < districs.length; i++) {
         reg = districs[i].title+'.*?(\\d,\\d).*?(\\d,\\d).*?(\\d,\\d).*?(\\d,\\d)';
         let regexp = new RegExp(reg, 'i');
@@ -21,7 +22,7 @@ textract.fromFileWithPath('./2018-04-13.doc', function( error, text ) {
             "lt":districs[i].lt,
             "ln":districs[i].ln
         }
-        parts.push(districs[i].title, loc, arr[1], arr[2], arr[3], arr[4]);
+        parts.push({"title": districs[i].title, "location": loc, "co": arr[1], "no": arr[2], "no2": arr[3], "so2": arr[4]});
     }
 })
 
