@@ -24,8 +24,6 @@ export default {
         map.setCenter({lat: coords[0].loc.lt, lng: coords[0].loc.ln});
         map.setZoom(10);
       }
-
-
       //Step 1: initialize communication with the platform
       var platform = new H.service.Platform({
         app_id: 'j4o3XiGsSiUtrrUyy1jp',
@@ -49,16 +47,27 @@ export default {
       var ui = H.ui.UI.createDefault(map, defaultLayers);
 
       // Now use the map as required...
-      moveMapToBerlin(map, this.markers.loc);
+      moveMapToBerlin(map, this.markers);
 
       //console.log(this);
-      let coords = {}, marker = [0];
+      let coords = {}, marker = [0], geomarker = [0];
       for(let i = 1; i < this.markers.length; i++) {
         coords = {lat: this.markers[i].loc.lt, lng: this.markers[i].loc.ln},
         marker[i] = new H.map.Marker(coords);
+        geomarker[i] = new H.geo.Point(this.markers[i].loc.lt, this.markers[i].loc.ln);
         console.log(coords)
         map.addObject(marker[i]);
       }
+
+      var linestring =  new H.geo.LineString();
+      
+     for (let i=1; i<geomarker.length; i++) {
+       linestring.pushPoint(geomarker[i]);
+     }
+
+     console.log(linestring);
+      var polygon = new H.map.Polygon(linestring);
+      map.addObject(polygon);
       console.log(marker)
     })
     .catch(error => console.log(error))
