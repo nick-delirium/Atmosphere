@@ -25,8 +25,6 @@ export default {
         map.setCenter({lat: coords[0].loc.lt, lng: coords[0].loc.ln});
         map.setZoom(10);
       }
-
-
       //Step 1: initialize communication with the platform
       let platform = new H.service.Platform({
         app_id: 'j4o3XiGsSiUtrrUyy1jp',
