@@ -2,12 +2,17 @@
   <div class="hello" style='margin: 0 20px'>
     <div class='row'>
       <div class='col-md-8' style='background-color:grey; padding:0!important'>
-        <div style=" height: 600px" id="mapContainer"></div>
+        <div style=" height: 600px; border: 1px solid rgba(52,58,64,1)" id="mapContainer"></div>
         </div>
       <div class='col-md-4'>
         <div class='bubble b-top'>
-          <h4>Средние значения</h4>
-          <p>Много текста</p>
+          <h4>Средние значения по ЛО</h4>
+          <ul>
+            <li>CO ПДК {{median.co.toFixed(3)}}</li> <br>
+            <li>NO ПДК {{median.no.toFixed(3)}}</li> <br>
+            <li>NO2 ПДК {{median.no2.toFixed(3)}}</li> <br>
+            <li>SO2 ПДК {{median.so2.toFixed(3)}}</li> <br>
+          </ul>
         </div>
         <div class="bubble b-bottom">
           <h4>Данные о районе</h4> 
@@ -28,7 +33,8 @@ export default {
   data() {
     return{
       "markers": {},
-      "toxics": {}
+      "toxics": {},
+      "median": {"co":0, "no":0, "no2":0, "so2":0}
     }
   },
 
@@ -37,6 +43,23 @@ mounted() {
     .then(response => {
       this.toxics = response.data;
       var query = response.data;
+      var obj = {"co":0, "no": 0, "no2": 0, "so2":0};
+      query.forEach((item, i, items) => {
+        item.co = item.co.replace(/,/g, '.');
+        item.no = item.no.replace(/,/g, '.');
+        item.no2 = item.no2.replace(/,/g, '.');
+        item.so2 = item.so2.replace(/,/g, '.');
+        obj.co += Number(item.co);
+        obj.no += Number(item.no);
+        obj.no2 += Number(item.no2);
+        obj.so2 += Number(item.so2);
+        return obj;
+      });
+      this.median.co = obj.co/query.length;
+      this.median.no = obj.no/query.length;
+      this.median.no2 = obj.no2/query.length;
+      this.median.so2 = obj.so2/query.length;
+      
         var platform = new H.service.Platform({
           'app_id': 'xxkQMf84Rb3cKA0fF8Du',
           'app_code': '3oHkXZJOAtM3jtOvDuGd0g' 
