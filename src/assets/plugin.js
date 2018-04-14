@@ -1,22 +1,23 @@
 (function(){
     class Button extends H.ui.Control {
 
-        constructor(icon_url) {
+        constructor(text) {
             super();
-            this.icon = icon_url;
+            this.text = text
+            // this.icon = icon_url;
             this.setAlignment('top-left');
         }
-        helloWorld(){
+        onButtonClick(){
             alert("hello world")
         }
         renderInternal(el, doc) {
             this.addClass('dl-button');
             el.innerHTML = `
                 <div class="dl-button__header">
-                    <img class='btn-img' src='${this.icon}'>
+                    <span class='btn-img'>${this.text}</span> 
                 </div>
             `;
-            el.addEventListener('click',this.helloWorld)
+            el.addEventListener('click',this.onButtonClick)
             super.renderInternal(el, doc);
         }
         addChild(control) {
