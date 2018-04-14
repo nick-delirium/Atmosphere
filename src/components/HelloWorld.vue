@@ -56,7 +56,23 @@ export default {
       let coords = {}, marker = [0], geomarker = [0];
       for(let i = 1; i < this.markers.length; i++) {
         coords = {lat: this.markers[i].loc.lt, lng: this.markers[i].loc.ln},
-        marker[i] = new H.map.Marker(coords);
+        marker[i] = new H.map.Marker(coords)
+        marker[i].addEventListener('tap', function (evt) {
+            console.log("AAAAAAAAAAAAAAA")
+        })
+        marker[i].addEventListener('pointerenter', function (evt) {
+            console.log("HEHEHEHEHE");
+            console.log(evt.target);
+            var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+            content: "fufufuf" 
+            //evt.target.getData()
+          });
+          ui.addBubble(bubble);
+          }
+        )
+        //pointerleave
+        
+        
         geomarker[i] = new H.geo.Point(this.markers[i].loc.lt, this.markers[i].loc.ln);
         console.log(coords)
         map.addObject(marker[i]);
