@@ -15,7 +15,7 @@
             this.addClass('dl-button '+this.id);
             el.innerHTML = `
                 <div class="dl-button__header">
-                    <span class='btn-img'>${this.text}</span> 
+                    <router-link class='nav-link' to="/${this.text+'map'}">${this.text}</router-link>
                 </div>
             `;
             //el.addEventListener('click',this.onButtonClick)
