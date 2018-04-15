@@ -128,9 +128,10 @@ mounted() {
         
           
           let pollution = query;
-          let PolyStyle = [];
+          let PolyStyle = [], polyStyle = [];
           let koef = 1500; // circle radius multiplier
           for(let i = 0; i < pollution.length; i++){
+            polyStyle[i] = (parseFloat(pollution[i].no2.replace(/,/, '.'))*100+parseFloat(pollution[i].no.replace(/,/, '.'))*100+parseFloat(pollution[i].so2.replace(/,/, '.'))*100+parseFloat(pollution[i].co.replace(/,/, '.'))*100)/4
             PolyStyle[i] = {
               no2: parseFloat(pollution[i].no2.replace(/,/, '.')) > 0.5 ? parseFloat(pollution[i].no2.replace(/,/, '.')) > 1 ? "red" : "yellow" : "green",
               no: parseFloat(pollution[i].no.replace(/,/, '.')) > 0.5 ? parseFloat(pollution[i].no.replace(/,/, '.')) > 1 ? "red" : "yellow" : "green",
@@ -141,7 +142,6 @@ mounted() {
 
             no2Group.addObject(circle);
 
-            
             var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseFloat(pollution[i].no.replace(/,/, '.'))*koef, {style: no});
 
             noGroup.addObject(circle);
@@ -155,6 +155,8 @@ mounted() {
             coGroup.addObject(circle);
             
           };
+          var colorsPoly = polyStyle.map(item => item > 25 ? item > 50 ? item > 75 ? "red":"orange":"yellow":"green");
+          console.log(colorsPoly)
           //groups buttons 
           const buttonNo = new Button('NO', 'NO');
           buttonNo.setAlignment('top-left');
@@ -231,11 +233,7 @@ mounted() {
             noGroup.setVisibility(true);
           })
 
-          var reader = new H.data.geojson.Reader('https://raw.githubusercontent.com/sylenien/megahack/master/src/assets/saint-petersburg.json', {
-            style: {
-              fillColor:'black'
-              }
-          });
+          var reader = new H.data.geojson.Reader('https://raw.githubusercontent.com/sylenien/megahack/master/src/assets/saint-petersburg.json');
           
           reader.parse();
           // Assumption: map already exists
