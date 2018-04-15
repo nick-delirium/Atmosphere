@@ -143,6 +143,7 @@ mounted() {
             
           };
           var colorsPoly = polyStyle.map(item => item > 25 ? item > 50 ? item > 75 ? "rgba(255,0,0,0.6)":"rgba(255,125,0,0.6)":"rgba(255,255,0,0.6)":"rgba(0,255,0,0.6)");
+          console.log(colorsPoly)
           //groups buttons 
           const buttonNo = new Button('NO', 'NO');
           buttonNo.setAlignment('top-left');
@@ -233,6 +234,7 @@ mounted() {
                     return 0;
                   }
 
+          // console.log(jsx.features[0].properties.Name, jsx.features[0].geometry.coordinates[0][0])
           let thing = jsx.features.map(item => {
               el.name = item.properties.Name;
               el.coords = item.geometry.coordinates[0][0]
@@ -265,12 +267,16 @@ mounted() {
               <li>SO<i><sub>2</sub></i>: ${info.so2 > 1 ? info.so2+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.so2} </li> <br>
             </ul>
             `
+            console.log(info);
           })
           map.addObject(pol);
           /**  this.pollution[id]   -> co, no, no2, so2 */
           })
           });
 
+          // console.log(this.pollution[2])
+
+       // }, urlPollution);
        /* Adding markers*/
           axios.get('http://localhost:8085/api/markers')
           .then(response => {
@@ -285,45 +291,78 @@ mounted() {
             for(let i = 1; i < this.markers.length; i++) {
               coords = {lat: this.markers[i].loc.lt, lng: this.markers[i].loc.ln},
               // data = {},
-              marker[i] = new H.map.Marker(coords, 
-              // {listeners: {
-              //   tap: function (evt) {
-              //     console.log("AAAAAAAAAAAAAAA")
-              //   },
-              //   pointerenter: function (evt) {
-              //     var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
-              //       content: "fufufuf" 
-              //     })
-              //   }
-              // }
-              // }
-              )
+              marker[i] = new H.map.Marker(coords, {listeners: {
+                tap: function (evt) {
+                  console.log("AAAAAAAAAAAAAAA")
+                },
+                pointerenter: function (evt) {
+                  console.log("HEHEHEHEHE");
+                  console.log(evt.target);
+                  var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+                    content: "fufufuf" 
+                  })
+                }
+              }
+              })
               marker[i].text = this.markers[i].title;
-             
-              marker[i].addEventListener('pointerenter', function(evt) {
+              
+              // marker[i].addEventListener('dbltap', function (evt) {
+              //     console.log("AAAAAAAAAAAAAAA");
+              //     console.log(evt.target.b); //.target.getData());
+              //     // map.setZoom(20);
+              //     map.setCenter(evt.target.b);
+              // })
+              marker[i].addEventListener('tap', function (evt) {
                   // window.setTimeout(300);
+                  console.log("HEHEHEHEHE");
+                  console.log(evt.target);
                   marker[i].bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
-                    content: marker[i].text
+                    content: marker[i].text//"fufufuf" 
+                    //evt.target.getData()
                   });
                 var target = evt.target;
                 // retrieve maximum zoom level
-                // var maxZoom = 14;//target.getData().maxZoom;
-                // // calculate best camera data to fit object's bounds
-                // var cameraData = map.getCameraDataForBounds(evt.target.getGeometry().getBounds());
-                // map.setZoom(Math.min(cameraData.zoom, maxZoom), true);
-                // map.setCenter(cameraData.position, true); 
+                var maxZoom = map.getZoom()+3;//target.getData().maxZoom;
+                // calculate best camera data to fit object's bounds
+                var cameraData = map.getCameraDataForBounds(evt.target.getGeometry().getBounds());
+                map.setZoom(Math.min(cameraData.zoom, maxZoom), true);
+                map.setCenter(cameraData.position, true); 
+                // map.setZoom(map.getZoom() + 7, true);
+                // map.setCenter(evt.target.b);
+                // map.setViewBounds();
                 ui.addBubble(marker[i].bubble);
-                let el = document.querySelector('.H_ib');
-                el.addEventListener('pointerleave', function(evt){
-                    // debugger;
-                    el.parentNode.removeChild(el)
-                  });
                 });
               
+              
+              
+              // geomarker[i] = new H.geo.Point(this.markers[i].loc.lt, this.markers[i].loc.ln);
+              // console.log(coords)
                 map.addObject(marker[i]);
             }
+          //   var linestring =  new H.geo.LineString();
+            
+          // for (let i=1; i<geomarker.length; i++) {
+          //   linestring.pushPoint(geomarker[i]);
+          // }
+          // console.log(linestring);
+            // var polygon = new H.map.Polygon(linestring, {
+            // style: {
+            //   strokeColor: '#05A',
+            //   fillColor: 'rgba(0, 240, 190, 0.4)',
+            //   lineWidth: 1,
+            //   lineCap: 'round',
+            //   lineJoin: 'miter',
+            //   miterLimit: 10,
+            //   lineDash: [ ],
+            //   lineDashOffset: 0
+            //   }
+            // }
           })
           .catch(error => console.log(error))
+          // })
+            
+
+
   }
 )}
 }
