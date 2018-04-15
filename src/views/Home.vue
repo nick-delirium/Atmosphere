@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h3 style='margin-top:20px;'>Карта загрязнений Санкт-Петербурга</h3>
+    <h3 style='margin-top:20px;'>Карта экологической обстановки Санкт-Петербурга</h3>
     <hr class='Hr'>
     <MapCont />
     
