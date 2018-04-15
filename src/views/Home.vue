@@ -11,13 +11,13 @@
 <script>
 // @ is an alias to /src
 import MapCont from '@/components/MapAndInfo.vue'
-import COmap from '@/components/COMap.vue'
+
 import Footer from '@/components/footer.vue'
 export default {
   name: 'home',
   components: {
     MapCont,
-    COmap,
+    
     Footer
   }
 }

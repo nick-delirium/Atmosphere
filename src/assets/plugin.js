@@ -13,9 +13,11 @@
         }
         renderInternal(el, doc) {
             this.addClass('dl-button '+this.id);
+            if(this.text == 'All') this.text = '';
+            let space = 'All'
             el.innerHTML = `
                 <div class="dl-button__header">
-                    <router-link class='nav-link' to="/${this.text+'map'}">${this.text}</router-link>
+                    <a class='nav-link' href="#/${this.text != '' ? (this.text+'map') : ''}">${this.text != '' ? this.text : space}</a>
                 </div>
             `;
             //el.addEventListener('click',this.onButtonClick)
