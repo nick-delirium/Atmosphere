@@ -21,7 +21,7 @@
 
 <style>
 .active-link{
-  color: #0056b3;
+  color: #a4cdfa;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
