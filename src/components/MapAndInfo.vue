@@ -142,10 +142,9 @@ mounted() {
             }
             
           };
-          var colorsPoly = polyStyle.map(item => item > 25 ? item > 50 ? item > 75 ? "rgba(255,0,0,0.6)":"rgba(255,125,0,0.6)":"rgba(255,255,0,0.6)":"rgba(0,255,0,0.6)");
-          console.log(colorsPoly)
+          var colorsPoly = polyStyle.map(item => item > 25 ? item > 50 ? item > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
           //groups buttons 
-          const buttonNo = new Button('NO', 'NO');
+          /* const buttonNo = new Button('NO', 'NO');
           buttonNo.setAlignment('top-left');
           ui.addControl('buttonNo',buttonNo);
           document.querySelector('.NO').addEventListener('click', () => {
@@ -219,6 +218,7 @@ mounted() {
             coGroup.setVisibility(true);
             noGroup.setVisibility(true);
           })
+          */
           var jsx = 'https://raw.githubusercontent.com/sylenien/megahack/master/src/assets/saint-petersburg.json'
           axios.get(jsx).then((response, jsx) => {
              jsx = response.data
@@ -234,7 +234,6 @@ mounted() {
                     return 0;
                   }
 
-          // console.log(jsx.features[0].properties.Name, jsx.features[0].geometry.coordinates[0][0])
           let thing = jsx.features.map(item => {
               el.name = item.properties.Name;
               el.coords = item.geometry.coordinates[0][0]
@@ -250,11 +249,21 @@ mounted() {
           let pol = new H.map.Polygon(lineString, {
               style: {
                 fillColor: colorsPoly[i],
-                  strokeColor: '#829',
-                  lineWidth: 2
+                  strokeColor: 'darkgrey',
+                  lineWidth: 1.5
                 },
               data: i
               })
+          pol.addEventListener('pointerenter', function(evt) {
+            let color = evt.target.style.fillColor.slice(0, -4);
+            let opacity = '0.6)';
+            evt.target.setStyle({fillColor:color+opacity});
+          });
+          pol.addEventListener('pointerleave', function(evt) {
+            let color = evt.target.style.fillColor.slice(0, -4);
+            let opacity = '0.5)';
+            evt.target.setStyle({fillColor:color+opacity});
+          })
           pol.addEventListener('tap', function(evt) {
             let info = pollution[evt.target.getData()]
             document.getElementById('notLots').innerHTML = `
@@ -267,16 +276,12 @@ mounted() {
               <li>SO<i><sub>2</sub></i>: ${info.so2 > 1 ? info.so2+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.so2} </li> <br>
             </ul>
             `
-            console.log(info);
           })
           map.addObject(pol);
           /**  this.pollution[id]   -> co, no, no2, so2 */
           })
           });
 
-          // console.log(this.pollution[2])
-
-       // }, urlPollution);
        /* Adding markers*/
           axios.get('http://localhost:8085/api/markers')
           .then(response => {
@@ -287,82 +292,68 @@ mounted() {
               map.setZoom(10);
             }
             
-            let coords = {}, marker = [], geomarker = [];
+            let coords = {}, marker = [], geomarker = [], bubble = [];
             for(let i = 1; i < this.markers.length; i++) {
               coords = {lat: this.markers[i].loc.lt, lng: this.markers[i].loc.ln},
               // data = {},
-              marker[i] = new H.map.Marker(coords, {listeners: {
-                tap: function (evt) {
-                  console.log("AAAAAAAAAAAAAAA")
-                },
-                pointerenter: function (evt) {
-                  console.log("HEHEHEHEHE");
-                  console.log(evt.target);
-                  var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
-                    content: "fufufuf" 
-                  })
-                }
-              }
-              })
+              marker[i] = new H.map.Marker(coords, 
+              // {listeners: {
+              //   tap: function (evt) {
+              //     console.log("AAAAAAAAAAAAAAA")
+              //   },
+              //   pointerenter: function (evt) {
+              //     var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+              //       content: "fufufuf" 
+              //     })
+              //   }
+              // }
+              // }
+              )
               marker[i].text = this.markers[i].title;
-              
-              // marker[i].addEventListener('dbltap', function (evt) {
-              //     console.log("AAAAAAAAAAAAAAA");
-              //     console.log(evt.target.b); //.target.getData());
-              //     // map.setZoom(20);
-              //     map.setCenter(evt.target.b);
-              // })
-              marker[i].addEventListener('tap', function (evt) {
-                  // window.setTimeout(300);
-                  console.log("HEHEHEHEHE");
-                  console.log(evt.target);
-                  marker[i].bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
-                    content: marker[i].text//"fufufuf" 
-                    //evt.target.getData()
-                  });
-                var target = evt.target;
+              marker[i].bubpos = marker[i].getPosition();
+              marker[i].bubble = new H.ui.InfoBubble(marker[i].getPosition(), {content:marker[i].text});
+              marker[i].bubble.close();
+              ui.addBubble(marker[i].bubble)
+              marker[i].addEventListener('tap', function(evt) {
                 // retrieve maximum zoom level
-                var maxZoom = map.getZoom()+3;//target.getData().maxZoom;
+                var maxZoom = 14;//target.getData().maxZoom;
                 // calculate best camera data to fit object's bounds
                 var cameraData = map.getCameraDataForBounds(evt.target.getGeometry().getBounds());
                 map.setZoom(Math.min(cameraData.zoom, maxZoom), true);
                 map.setCenter(cameraData.position, true); 
-                // map.setZoom(map.getZoom() + 7, true);
-                // map.setCenter(evt.target.b);
-                // map.setViewBounds();
-                ui.addBubble(marker[i].bubble);
-                });
-              
-              
-              
-              // geomarker[i] = new H.geo.Point(this.markers[i].loc.lt, this.markers[i].loc.ln);
-              // console.log(coords)
+                
+              });
                 map.addObject(marker[i]);
             }
-          //   var linestring =  new H.geo.LineString();
+            let hoveredObject;
+            let infoBubble = new H.ui.InfoBubble({lat: 0, lng: 0}, {});
+            infoBubble.addClass('gdp-info-bubble');
+            infoBubble.close();
+            ui.addBubble(infoBubble);
+
+            map.addEventListener('pointermove', (e) => {
+              
+              if(e.target != map && !e.target.getBounds){
+                
+                if (hoveredObject && hoveredObject !== e.target && e.target == map) {
+                    infoBubble.close();
+                }
+
+                hoveredObject = e.target;
+                
+                    let row = hoveredObject.text;
+                    if (row) {
+                        infoBubble.setContent(row)
+                        infoBubble.setPosition(hoveredObject.bubpos);
+                        infoBubble.open();
+                    }
+              } else {
+                infoBubble.close();
+              }
+            });
             
-          // for (let i=1; i<geomarker.length; i++) {
-          //   linestring.pushPoint(geomarker[i]);
-          // }
-          // console.log(linestring);
-            // var polygon = new H.map.Polygon(linestring, {
-            // style: {
-            //   strokeColor: '#05A',
-            //   fillColor: 'rgba(0, 240, 190, 0.4)',
-            //   lineWidth: 1,
-            //   lineCap: 'round',
-            //   lineJoin: 'miter',
-            //   miterLimit: 10,
-            //   lineDash: [ ],
-            //   lineDashOffset: 0
-            //   }
-            // }
           })
           .catch(error => console.log(error))
-          // })
-            
-
-
   }
 )}
 }
@@ -375,6 +366,20 @@ mounted() {
     font-size: 0.95rem;
     padding: 5px 15px 5px;
     border-radius: 10px;
+}
+.gdp-info-bubble .H_ib_body{
+  /* margin-right: -4em; */
+  margin-bottom: 18px;
+  right: 30px
+}
+.gdp-info-bubble .H_ib_tail{
+  margin-bottom: 18px;
+}
+.H_ib_tail {
+      display: none!important;
+}
+.H_ib_close{
+  display:none!important;
 }
 h3 {
   margin: 40px 0 0;
