@@ -27,7 +27,7 @@
 import axios from 'axios';
 import * as jsn from '../assets/saint-petersburg.json';
 export default {
-  name: 'MapAndInfo',
+  name: 'COmap',
   data() {
     return{
       "markers": {},
@@ -210,7 +210,7 @@ mounted() {
           let PolyStyle = [], polyStyle = [];
           let koef = 1500; // circle radius multiplier
           for(let i = 0; i < pollution.length; i++){
-            polyStyle[i] = (parseFloat(pollution[i].no2.replace(/,/, '.'))*100+parseFloat(pollution[i].no.replace(/,/, '.'))*100+parseFloat(pollution[i].so2.replace(/,/, '.'))*100+parseFloat(pollution[i].co.replace(/,/, '.'))*100)/4
+            polyStyle[i] = (parseFloat(pollution[i].co.replace(/,/, '.'))*100)
             
           };
           var colorsPoly = polyStyle.map(item => item > 25 ? item > 50 ? item > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");

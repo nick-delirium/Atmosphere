@@ -10,7 +10,7 @@ export default {
 
 <style>
 .footer {
-    position: unset;
+    position: relative;
     margin-top: 30px;
     right: 0;
     bottom: 0;
