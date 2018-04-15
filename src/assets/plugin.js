@@ -14,10 +14,13 @@
         renderInternal(el, doc) {
             this.addClass('dl-button '+this.id);
             if(this.text == 'All') this.text = '';
-            let space = 'All'
+            let space = 'All';
+            let href = window.location.href.split('/');
+            let active = href[href.length-1].replace(/map/, '').toUpperCase();
+            console.log(active)
             el.innerHTML = `
                 <div class="dl-button__header">
-                    <a class='nav-link' href="#/${this.text != '' ? (this.text+'map') : ''}">${this.text != '' ? this.text : space}</a>
+                    <a class='nav-link ${this.text == active ? this.text == '' ? "active-link": "active-link" : ""}' href="#/${this.text != '' ? (this.text+'map') : ''}">${this.text != '' ? this.text : space}</a>
                 </div>
             `;
             //el.addEventListener('click',this.onButtonClick)

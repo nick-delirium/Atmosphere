@@ -259,6 +259,8 @@ mounted() {
               marker[i].bubpos = marker[i].getPosition();
               marker[i].bubble = new H.ui.InfoBubble(marker[i].getPosition(), {content:marker[i].text});
               marker[i].bubble.close();
+              
+              
               ui.addBubble(marker[i].bubble)
               marker[i].addEventListener('tap', function(evt) {
                 // retrieve maximum zoom level
@@ -379,4 +381,5 @@ a {
 .dl-button-active {
   box-shadow: 0px 0px 5px 3px #65cfb7;
 }
+
 </style>
