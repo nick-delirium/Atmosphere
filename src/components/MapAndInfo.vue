@@ -254,18 +254,22 @@ mounted() {
               return {"name": item.properties.Name, "coords": item.geometry.coordinates[0][0]}
             })
           console.log(thing.sort(compare)) // НАТАША ЭТО ТВОИ КООРДИНАТЫ
-          
-          var lineString = new H.geo.LineString()
-          thing[0].coords.forEach((item)=>{lineString.pushPoint(new H.geo.Point(item[0],item[1]))});
+          var lineString;
+          thing.forEach((item, i, items) => {
+            lineString = new H.geo.LineString()
+            item.coords.forEach((item)=>{
+              lineString.pushPoint(new H.geo.Point(item[1],item[0]));
+            });
           map.addObject(
-              new H.map.Polygon(lineString, {
-                style: {
-                  fillColor: '#FFFFCC',
+            new H.map.Polygon(lineString, {
+              style: {
+                fillColor: 'rgba(130,130,130, 0.5)',
                   strokeColor: '#829',
-                  lineWidth: 8
+                  lineWidth: 3
                 }
-              }))
+              }));
           
+          })
           });
 
 
