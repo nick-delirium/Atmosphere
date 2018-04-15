@@ -254,7 +254,24 @@ mounted() {
               return {"name": item.properties.Name, "coords": item.geometry.coordinates[0][0]}
             })
           console.log(thing.sort(compare)) // НАТАША ЭТО ТВОИ КООРДИНАТЫ
+          
+          var lineString = new H.geo.LineString()
+          thing[0].coords.forEach((item)=>{lineString.pushPoint(new H.geo.Point(item[0],item[1]))});
+          map.addObject(
+              new H.map.Polygon(lineString, {
+                style: {
+                  fillColor: '#FFFFCC',
+                  strokeColor: '#829',
+                  lineWidth: 8
+                }
+              }))
+          
           });
+
+
+
+
+
           // 'saint-petersburg.json'
 
        // }, urlPollution);
