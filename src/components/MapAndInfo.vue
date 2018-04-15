@@ -338,6 +338,11 @@ mounted() {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+.H_ib_body{
+    font-size: 0.95rem;
+    padding: 5px 15px 5px;
+    border-radius: 10px;
+}
 h3 {
   margin: 40px 0 0;
 }
