@@ -8,10 +8,10 @@
         <div class='bubble b-top'>
           <h4>Средние значения по СПб</h4>
           <ul class='text-left'>
-            <li>CO: {{median.co.toFixed(3)}}% ПДК  <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
-            <li>NO: {{median.no.toFixed(3)}}% ПДК <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
-            <li>NO<i><sub>2</sub></i>: {{median.no2.toFixed(3)}}% ПДК <span v-if="median.no2>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
-            <li>SO<i><sub>2</sub></i>: {{median.so2.toFixed(3)}}% ПДК <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
+            <li>CO: {{(median.co*100).toFixed(1)}}% ПДК  <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
+            <li>NO: {{(median.no*100).toFixed(1)}}% ПДК <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
+            <li>NO<i><sub>2</sub></i>: {{(median.no2*100).toFixed(1)}}% ПДК <span v-if="median.no2>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
+            <li>SO<i><sub>2</sub></i>: {{(median.so2*100).toFixed(1)}}% ПДК <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
           </ul>
         </div>
         <div class="bubble b-bottom">
