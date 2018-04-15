@@ -232,13 +232,29 @@ mounted() {
             coGroup.setVisibility(true);
             noGroup.setVisibility(true);
           })
+          var jsx = 'https://raw.githubusercontent.com/sylenien/megahack/master/src/assets/saint-petersburg.json'
+          axios.get(jsx).then((response, jsx) => {
+             jsx = response.data
+          var reader = new H.data.geojson.Reader(jsx);
+          let el = {"name":'', "coords": 0};
 
-          var reader = new H.data.geojson.Reader('https://raw.githubusercontent.com/sylenien/megahack/master/src/assets/saint-petersburg.json');
-          
-          reader.parse();
-          // Assumption: map already exists
-          map.addLayer(reader.getLayer());
 
+                  function compare(a,b) {
+                    if (a.name < b.name)
+                      return -1;
+                    if (a.name > b.name)
+                      return 1;
+                    return 0;
+                  }
+
+          // console.log(jsx.features[0].properties.Name, jsx.features[0].geometry.coordinates[0][0])
+          let thing = jsx.features.map(item => {
+              el.name = item.properties.Name;
+              el.coords = item.geometry.coordinates[0][0]
+              return {"name": item.properties.Name, "coords": item.geometry.coordinates[0][0]}
+            })
+          console.log(thing.sort(compare)) // НАТАША ЭТО ТВОИ КООРДИНАТЫ
+          });
           // 'saint-petersburg.json'
 
        // }, urlPollution);
