@@ -6,7 +6,7 @@
         </div>
       <div class='col-md-4'>
         <div class='bubble b-top'>
-          <h4>Средние значения по ЛО</h4>
+          <h4>Средние значения по СПб</h4>
           <ul class='text-left'>
             <li>CO: {{median.co.toFixed(3)}}% ПДК  <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
             <li>NO: {{median.no.toFixed(3)}}% ПДК <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
@@ -202,12 +202,12 @@ mounted() {
           pol.addEventListener('pointerenter', function(evt) {
             let color = evt.target.style.fillColor.slice(0, -4);
             let opacity = '0.6)';
-            evt.target.setStyle({fillColor:color+opacity});
+            evt.target.setStyle({fillColor:color+opacity, strokeColor: 'darkgrey'});
           });
           pol.addEventListener('pointerleave', function(evt) {
             let color = evt.target.style.fillColor.slice(0, -4);
             let opacity = '0.5)';
-            evt.target.setStyle({fillColor:color+opacity});
+            evt.target.setStyle({fillColor:color+opacity, strokeColor: 'darkgrey'});
           })
           pol.addEventListener('tap', function(evt) {
             let info = pollution[evt.target.getData()]
