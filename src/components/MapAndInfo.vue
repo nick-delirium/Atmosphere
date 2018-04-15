@@ -242,6 +242,92 @@ mounted() {
           // 'saint-petersburg.json'
 
        // }, urlPollution);
+       /* Adding markers*/
+          axios.get('http://localhost:8085/api/markers')
+          .then(response => {
+            this.markers = response.data.data;
+            function moveToStP(map, coords){
+              //TODO: plain
+              map.setCenter({lat: coords[0].loc.lt, lng: coords[0].loc.ln});
+              map.setZoom(10);
+            }
+            
+            let coords = {}, marker = [], geomarker = [];
+            for(let i = 1; i < this.markers.length; i++) {
+              coords = {lat: this.markers[i].loc.lt, lng: this.markers[i].loc.ln},
+              // data = {},
+              marker[i] = new H.map.Marker(coords, {listeners: {
+                tap: function (evt) {
+                  console.log("AAAAAAAAAAAAAAA")
+                },
+                pointerenter: function (evt) {
+                  console.log("HEHEHEHEHE");
+                  console.log(evt.target);
+                  var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+                    content: "fufufuf" 
+                  })
+                }
+              }
+              })
+              marker[i].text = this.markers[i].title;
+              
+              // marker[i].addEventListener('dbltap', function (evt) {
+              //     console.log("AAAAAAAAAAAAAAA");
+              //     console.log(evt.target.b); //.target.getData());
+              //     // map.setZoom(20);
+              //     map.setCenter(evt.target.b);
+              // })
+              marker[i].addEventListener('tap', function (evt) {
+                  // window.setTimeout(300);
+                  console.log("HEHEHEHEHE");
+                  console.log(evt.target);
+                  marker[i].bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+                    content: marker[i].text//"fufufuf" 
+                    //evt.target.getData()
+                  });
+                var target = evt.target;
+                // retrieve maximum zoom level
+                var maxZoom = map.getZoom()+3;//target.getData().maxZoom;
+                // calculate best camera data to fit object's bounds
+                var cameraData = map.getCameraDataForBounds(evt.target.getGeometry().getBounds());
+                map.setZoom(Math.min(cameraData.zoom, maxZoom), true);
+                map.setCenter(cameraData.position, true); 
+                // map.setZoom(map.getZoom() + 7, true);
+                // map.setCenter(evt.target.b);
+                // map.setViewBounds();
+                ui.addBubble(marker[i].bubble);
+                });
+              
+              
+              
+              // geomarker[i] = new H.geo.Point(this.markers[i].loc.lt, this.markers[i].loc.ln);
+              // console.log(coords)
+                map.addObject(marker[i]);
+            }
+          //   var linestring =  new H.geo.LineString();
+            
+          // for (let i=1; i<geomarker.length; i++) {
+          //   linestring.pushPoint(geomarker[i]);
+          // }
+          // console.log(linestring);
+            // var polygon = new H.map.Polygon(linestring, {
+            // style: {
+            //   strokeColor: '#05A',
+            //   fillColor: 'rgba(0, 240, 190, 0.4)',
+            //   lineWidth: 1,
+            //   lineCap: 'round',
+            //   lineJoin: 'miter',
+            //   miterLimit: 10,
+            //   lineDash: [ ],
+            //   lineDashOffset: 0
+            //   }
+            // }
+          })
+          .catch(error => console.log(error))
+          // })
+            
+
+
   }
 )}
 }
@@ -250,6 +336,11 @@ mounted() {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+.H_ib_body{
+    font-size: 0.95rem;
+    padding: 5px 15px 5px;
+    border-radius: 10px;
+}
 h3 {
   margin: 40px 0 0;
 }
