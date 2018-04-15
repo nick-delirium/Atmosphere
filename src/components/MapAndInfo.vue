@@ -8,15 +8,15 @@
         <div class='bubble b-top'>
           <h4>Средние значения по ЛО</h4>
           <ul class='text-left'>
-            <li>CO ПДК {{median.co.toFixed(3)}} <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
-            <li>NO ПДК {{median.no.toFixed(3)}} <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
-            <li>NO<i><sub>2</sub></i> ПДК {{median.no2.toFixed(3)}} <span v-if="median.no2>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
-            <li>SO<i><sub>2</sub></i> ПДК {{median.so2.toFixed(3)}} <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
+            <li>CO: {{median.co.toFixed(3)}}% ПДК  <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
+            <li>NO: {{median.no.toFixed(3)}}% ПДК <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
+            <li>NO<i><sub>2</sub></i>: {{median.no2.toFixed(3)}}% ПДК <span v-if="median.no2>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
+            <li>SO<i><sub>2</sub></i>: {{median.so2.toFixed(3)}}% ПДК <span v-if="median.no>1" class='alert'> <i class="fas fa-exclamation"></i> Превышение ПДК</span></li> <br>
           </ul>
         </div>
         <div class="bubble b-bottom">
-          <h4>Данные о районе</h4> 
-          <p>Не очень много текста</p></div>
+          <div id='notLots'><h4>Нажмите на любой район, что бы увидеть сводку данных о нём.</h4> </div>
+          </div>
       </div>
       
     </div>
@@ -32,7 +32,8 @@ export default {
     return{
       "markers": {},
       "toxics": {},
-      "median": {"co":0, "no":0, "no2":0, "so2":0}
+      "median": {"co":0, "no":0, "no2":0, "so2":0},
+      "pollution": {}
     }
   },
 mounted() {
@@ -128,6 +129,7 @@ mounted() {
         
           
           let pollution = query;
+          this.pollution = pollution;
           let PolyStyle = [], polyStyle = [];
           let koef = 1500; // circle radius multiplier
           for(let i = 0; i < pollution.length; i++){
@@ -138,24 +140,9 @@ mounted() {
               so2: parseFloat(pollution[i].so2.replace(/,/, '.')) > 0.5 ? parseFloat(pollution[i].so2.replace(/,/, '.')) > 1 ? "red" : "yellow" : "green",
               co: parseFloat(pollution[i].co.replace(/,/, '.')) > 0.5 ? parseFloat(pollution[i].co.replace(/,/, '.')) > 1 ? "red" : "yellow" : "green"
             }
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseFloat(pollution[i].no2.replace(/,/, '.'))*koef, {style: no2});
-
-            no2Group.addObject(circle);
-
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseFloat(pollution[i].no.replace(/,/, '.'))*koef, {style: no});
-
-            noGroup.addObject(circle);
-
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseFloat(pollution[i].so2.replace(/,/, '.'))*koef, {style: so2});
-
-            so2Group.addObject(circle);
-
-            var circle = new H.map.Circle({lat: pollution[i].location.lt, lng: pollution[i].location.ln}, parseFloat(pollution[i].co.replace(/,/, '.'))*koef, {style: co});
-
-            coGroup.addObject(circle);
             
           };
-          var colorsPoly = polyStyle.map(item => item > 25 ? item > 50 ? item > 75 ? "red":"orange":"yellow":"green");
+          var colorsPoly = polyStyle.map(item => item > 25 ? item > 50 ? item > 75 ? "rgba(255,0,0,0.6)":"rgba(255,125,0,0.6)":"rgba(255,255,0,0.6)":"rgba(0,255,0,0.6)");
           console.log(colorsPoly)
           //groups buttons 
           const buttonNo = new Button('NO', 'NO');
@@ -253,26 +240,41 @@ mounted() {
               el.coords = item.geometry.coordinates[0][0]
               return {"name": item.properties.Name, "coords": item.geometry.coordinates[0][0]}
             })
-          console.log(thing.sort(compare)) // НАТАША ЭТО ТВОИ КООРДИНАТЫ
+          thing = thing.sort(compare);
           var lineString;
           thing.forEach((item, i, items) => {
             lineString = new H.geo.LineString()
             item.coords.forEach((item)=>{
               lineString.pushPoint(new H.geo.Point(item[1],item[0]));
             });
-          map.addObject(
-            new H.map.Polygon(lineString, {
+          let pol = new H.map.Polygon(lineString, {
               style: {
-                fillColor: 'rgba(130,130,130, 0.5)',
+                fillColor: colorsPoly[i],
                   strokeColor: '#829',
-                  lineWidth: 3
-                }
-              }));
-          
+                  lineWidth: 2
+                },
+              data: i
+              })
+          pol.addEventListener('tap', function(evt) {
+            let info = pollution[evt.target.getData()]
+            document.getElementById('notLots').innerHTML = `
+            <h4>${info.title}</h4>
+            <ul class='text-left'>
+              <p>Содержание вредных веществ, % от ПДК.</p>
+              <li>CO: ${info.co > 1 ? info.co+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.co} </li> <br>
+              <li>NO: ${info.no > 1 ? info.no+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.no}    </li> <br>
+              <li>NO<i><sub>2</sub></i>: ${info.no2 > 1 ? info.no2+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.no2} </li> <br>
+              <li>SO<i><sub>2</sub></i>: ${info.so2 > 1 ? info.so2+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.so2} </li> <br>
+            </ul>
+            `
+            console.log(info);
+          })
+          map.addObject(pol);
+          /**  this.pollution[id]   -> co, no, no2, so2 */
           })
           });
 
-
+          // console.log(this.pollution[2])
 
 
 

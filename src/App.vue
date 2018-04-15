@@ -2,8 +2,8 @@
   <div id="app">
     <div id="nav">
       <nav class="navbar navbar-inverse navbar-expand-sm sticky-top navbar-dark bg-dark sticky-top">
-        <a class="navbar-brand" href="#">
-          <img src="https://www.here.com/sites/all/themes/herecorporate/build/img/here-logo.svg" alt="Logo" style="width:50px;border-radius:5px">
+        <a class="navbar-brand" href="#" style='padding-top:0!important'>
+          <img src="./assets/Logo.png" alt="Logo" style="width:150px">
         </a>
         <ul class="navbar-nav nav ml-auto">
           <li class="nav-item">
@@ -20,6 +20,7 @@
 </template>
 
 <style>
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -52,6 +53,7 @@
     text-align: center;
     position: relative;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(52,58,64,1), rgba(0, 0, 0, 0));
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    margin-top: 10px;
   }
 </style>
