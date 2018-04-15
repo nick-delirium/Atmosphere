@@ -276,10 +276,6 @@ mounted() {
 
           // console.log(this.pollution[2])
 
-
-
-          // 'saint-petersburg.json'
-
        // }, urlPollution);
        /* Adding markers*/
           axios.get('http://localhost:8085/api/markers')
