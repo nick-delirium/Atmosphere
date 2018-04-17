@@ -3,7 +3,7 @@
     <div id="nav">
       <nav class="navbar navbar-inverse navbar-expand-sm sticky-top navbar-dark bg-dark sticky-top">
         <a class="navbar-brand" href="#" style='padding-top:0!important'>
-          <img src="./assets/Logo.png" alt="Logo" style="width:150px">
+          <img src="./assets/logo.png" alt="Logo" style="width:150px">
         </a>
         <ul class="navbar-nav nav ml-auto">
           <li class="nav-item">

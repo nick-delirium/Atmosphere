@@ -16,7 +16,8 @@
         </div>
         <div class="bubble b-bottom">
           <div id='notLots'><h4>Нажмите на любой район, что бы увидеть сводку данных о нём.</h4> </div>
-          </div>
+        </div>
+        
       </div>
       
     </div>
