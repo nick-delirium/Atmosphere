@@ -26,7 +26,6 @@
 
 <script>
 import axios from 'axios';
-import * as jsn from '../assets/saint-petersburg.json';
 export default {
   name: 'MapAndInfo',
   data() {
@@ -41,8 +40,8 @@ mounted() {
     axios.get('http://localhost:8085/api/toxic')
     .then(response => {
       this.toxics = response.data;
-      var query = response.data;
-      var obj = {"co":0, "no": 0, "no2": 0, "so2":0};
+      let query = response.data;
+      let obj = {"co":0, "no": 0, "no2": 0, "so2":0};
       query.forEach((item, i, items) => {
         item.co = item.co.replace(/,/g, '.');
         item.no = item.no.replace(/,/g, '.');
@@ -89,106 +88,49 @@ mounted() {
         mapSettings.setAlignment('top-right');
         zoom.setAlignment('middle-right');
         scalebar.setAlignment('top-right');
-
-        //style
-        var no2 = {
-          strokeColor: 'rgba(0, 229, 255, 0.1)',
-          fillColor: 'rgba(244,67,54, 0.6)'
-        };
-
-        var no = {
-          strokeColor: 'rgba(0, 229, 255, 0.1)',
-          fillColor: 'rgba(156,39,176, 0.6)'
-        };
-
-        var so2 = {
-          strokeColor: 'rgba(0, 229, 255, 0.1)',
-          fillColor: 'rgba(33,150,243, 0.6)'
-        };
-
-        var co = {
-          strokeColor: 'rgba(0, 229, 255, 0.1)',
-          fillColor: 'rgba(205,220,57, 0.6)'
-        };
-
-        //utl to JSON
-        var urlPollution = 'json/pollution.json';
-
-        //group circle to visualisation
-        var no2Group = new H.map.Group();
-        map.addObject(no2Group);
-
-        var noGroup = new H.map.Group();
-        map.addObject(noGroup);
-
-        var so2Group = new H.map.Group();
-        map.addObject(so2Group);
-
-        var coGroup = new H.map.Group();
-        map.addObject(coGroup);
-
         
           
-          // //groups buttons 
-           const buttonNo = new Button('NO', 'NO');
-          buttonNo.setAlignment('top-left');
-          ui.addControl('buttonNo',buttonNo);
-          
-
-          const buttonSo2 = new Button('SO2', 'SO2');
-          buttonSo2.setAlignment('top-left');
-          ui.addControl('buttonSo2',buttonSo2);
-          
-
-          const buttonNo2 = new Button('NO2', 'NO2');
-          buttonNo2.setAlignment('top-left');
-          ui.addControl('buttonNo2',buttonNo2);
-          
-
-          const buttonCo = new Button('CO', 'CO');
-          buttonCo.setAlignment('top-left');
-          ui.addControl('buttonCo',buttonCo);
-          
-
-          const buttonAll = new Button('All', 'All');
-          buttonCo.setAlignment('top-left');
-          ui.addControl('buttonAll',buttonAll);
-          
-          
-
-          let pollution = query;
-          this.pollution = pollution;
-          let PolyStyle = [], polyStyle = [];
-          let koef = 1500; // circle radius multiplier
-          for(let i = 0; i < pollution.length; i++){
-            polyStyle[i] = (parseFloat(pollution[i].no2.replace(/,/, '.'))*100+parseFloat(pollution[i].no.replace(/,/, '.'))*100+parseFloat(pollution[i].so2.replace(/,/, '.'))*100+parseFloat(pollution[i].co.replace(/,/, '.'))*100)/4
-            
-          };
-          var colorsPoly = polyStyle.map(item => item > 25 ? item > 50 ? item > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
-          
-          var jsx = 'https://raw.githubusercontent.com/sylenien/megahack/master/src/assets/saint-petersburg.json'
-          axios.get(jsx).then((response, jsx) => {
-             jsx = response.data
-          var reader = new H.data.geojson.Reader(jsx);
-          let el = {"name":'', "coords": 0};
-
-
-                  function compare(a,b) {
-                    if (a.name < b.name)
-                      return -1;
-                    if (a.name > b.name)
-                      return 1;
-                    return 0;
-                  }
-
-          let thing = jsx.features.map(item => {
-              el.name = item.properties.Name;
-              el.coords = item.geometry.coordinates[0][0]
-              return {"name": item.properties.Name, "coords": item.geometry.coordinates[0][0]}
-            })
-          thing = thing.sort(compare);
-          var lineString;
-          thing.forEach((item, i, items) => {
+        //groups buttons 
+        const buttonNo = new Button('NO', 'NO');
+        buttonNo.setAlignment('top-left');
+        ui.addControl('buttonNo',buttonNo);
+        
+        const buttonSo2 = new Button('SO2', 'SO2');
+        buttonSo2.setAlignment('top-left');
+        ui.addControl('buttonSo2',buttonSo2);
+        
+        const buttonNo2 = new Button('NO2', 'NO2');
+        buttonNo2.setAlignment('top-left');
+        ui.addControl('buttonNo2',buttonNo2);
+        
+        const buttonCo = new Button('CO', 'CO');
+        buttonCo.setAlignment('top-left');
+        ui.addControl('buttonCo',buttonCo);
+        
+        const buttonAll = new Button('All', 'All');
+        buttonCo.setAlignment('top-left');
+        ui.addControl('buttonAll',buttonAll);
+        
+        let pollution = query;
+        this.pollution = pollution;
+        let PolyStyle = [], polyStyle = [];
+        let koef = 1500; // circle radius multiplier
+        for(let i = 0; i < pollution.length; i++){
+          polyStyle.push({
+            "no": parseFloat(pollution[i].no.replace(/,/, '.'))*100,
+            "no2": parseFloat(pollution[i].no2.replace(/,/, '.'))*100,
+            "co": parseFloat(pollution[i].co.replace(/,/, '.'))*100,
+            "so2": parseFloat(pollution[i].so2.replace(/,/, '.'))*100,
+            "summary": (parseFloat(pollution[i].no2.replace(/,/, '.'))*100+parseFloat(pollution[i].no.replace(/,/, '.'))*100+parseFloat(pollution[i].so2.replace(/,/, '.'))*100+parseFloat(pollution[i].co.replace(/,/, '.'))*100)/4
+          })            
+        };
+        let colorsPoly = polyStyle.map(item => item.summary > 25 ? item.summary > 50 ? item.summary > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
+        
+        const jsx = 'http://localhost:8085/api/geojson'
+        axios.get(jsx).then((response) => {
+           let geodata = response.data;
+          let lineString;
+          geodata.forEach((item, i, items) => {
             lineString = new H.geo.LineString()
             item.coords.forEach((item)=>{
               lineString.pushPoint(new H.geo.Point(item[1],item[0]));
@@ -223,11 +165,11 @@ mounted() {
               <li>SO<i><sub>2</sub></i>: ${info.so2 > 1 ? info.so2+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.so2} </li> <br>
             </ul>
             `
-          })
-          map.addObject(pol);
-          /**  this.pollution[id]   -> co, no, no2, so2 */
-          })
           });
+          
+          map.addObject(pol);
+          });
+        });
 
        /* Adding markers*/
           axios.get('http://localhost:8085/api/markers')
@@ -242,25 +184,11 @@ mounted() {
             let coords = {}, marker = [], geomarker = [], bubble = [];
             for(let i = 1; i < this.markers.length; i++) {
               coords = {lat: this.markers[i].loc.lt, lng: this.markers[i].loc.ln},
-              // data = {},
-              marker[i] = new H.map.Marker(coords, 
-              // {listeners: {
-              //   tap: function (evt) {
-              //     console.log("AAAAAAAAAAAAAAA")
-              //   },
-              //   pointerenter: function (evt) {
-              //     var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
-              //       content: "fufufuf" 
-              //     })
-              //   }
-              // }
-              // }
-              )
+              marker[i] = new H.map.Marker(coords)
               marker[i].text = this.markers[i].title;
               marker[i].bubpos = marker[i].getPosition();
               marker[i].bubble = new H.ui.InfoBubble(marker[i].getPosition(), {content:marker[i].text});
               marker[i].bubble.close();
-              
               
               ui.addBubble(marker[i].bubble)
               marker[i].addEventListener('tap', function(evt) {

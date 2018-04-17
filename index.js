@@ -8,9 +8,9 @@ const express  = require('express'),
 
 let data    = JSON.parse(fs.readFileSync('data.json', 'utf8'));
 let markers = JSON.parse(fs.readFileSync('markers.json', 'utf8'));
-
+var geojson = JSON.parse(fs.readFileSync('./src/assets/saint-petersburg.json', 'utf8'));
 let districs = JSON.parse(fs.readFileSync('toxic.json', 'utf8'));
-let reg, parts = [];
+let reg, jsx, parts = [];
 
 textract.fromFileWithPath('./2018-04-13.txt', function( error, text ) {
     // console.log(error);
@@ -25,6 +25,22 @@ textract.fromFileWithPath('./2018-04-13.txt', function( error, text ) {
         parts.push({"title": districs[i].title, "location": loc, "co": arr[1], "no": arr[2], "no2": arr[3], "so2": arr[4]});
     }
 })
+
+const compare = (a,b) => {
+    if (a.name < b.name) return -1;
+    else if (a.name > b.name) return 1;
+    else return 0;
+}
+
+const start = async (geocords, sortType) => {
+    return new Promise(resolve => {
+        let mapData = geocords.features.map(item => {
+            return {"name": item.properties.Name, "coords":item.geometry.coordinates[0][0]}
+        })
+        mapData = mapData.sort(sortType);
+        resolve(mapData);
+    })
+}
 
 app.use(express.static(path.resolve(__dirname, './dist/')))
 app.use(compress());
@@ -55,9 +71,16 @@ app.get('/api/markers', (req, res) => {
 app.get('/api/toxic', (req, res) => {
     let json = parts;
     res.send(json);
+});
+
+app.get('/api/geojson', (req, res) => {
+    res.send(jsx);
 })
 
 app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, './dist/index.html'))
 })
-app.listen(8085, () => console.log('server is live @8085'))
+app.listen(8085, async () => {
+    jsx = await start(geojson, compare);
+    console.log('server is live @8085 and all data is set')
+})
