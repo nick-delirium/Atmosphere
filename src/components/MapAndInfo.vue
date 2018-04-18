@@ -125,6 +125,10 @@ mounted() {
           })            
         };
         let colorsPoly = polyStyle.map(item => item.summary > 25 ? item.summary > 50 ? item.summary > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
+        let colorsPolyNo = polyStyle.map(item => item.no > 25 ? item.no > 50 ? item.no > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
+        let colorsPolyNo2 = polyStyle.map(item => item.no2 > 25 ? item.no2 > 50 ? item.no2 > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
+        let colorsPolyCo = polyStyle.map(item => item.co > 25 ? item.co > 50 ? item.co > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
+        let colorsPolySo2 = polyStyle.map(item => item.so2 > 25 ? item.so2 > 50 ? item.so2 > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
         
         const jsx = 'http://localhost:8085/api/geojson'
         axios.get(jsx).then((response) => {
@@ -135,9 +139,11 @@ mounted() {
             item.coords.forEach((item)=>{
               lineString.pushPoint(new H.geo.Point(item[1],item[0]));
             });
-          let pol = new H.map.Polygon(lineString, {
+
+          const polCreate = (type) => {
+            let pol = new H.map.Polygon(lineString, {
               style: {
-                fillColor: colorsPoly[i],
+                fillColor: ["colorsPoly"+type][i],
                   strokeColor: 'darkgrey',
                   lineWidth: 1.5
                 },
@@ -168,6 +174,9 @@ mounted() {
           });
           
           map.addObject(pol);
+          }
+
+          
           });
         });
 
