@@ -15,14 +15,15 @@
             this.addClass('dl-button '+this.id);
             if(this.text == 'All') this.text = '';
             let space = 'All';
-            let href = window.location.href.split('/');
-            let active = href[href.length-1].replace(/map/, '').toUpperCase();
-            console.log(active)
+            // let href = window.location.href.split('/');
+            // let active = href[href.length-1].replace(/map/, '').toUpperCase();
+            // console.log(active)
             el.innerHTML = `
                 <div class="dl-button__header">
-                    <a class='nav-link ${this.text == active ? this.text == '' ? "active-link": "active-link" : ""}' href="#/${this.text != '' ? (this.text+'map') : ''}">${this.text != '' ? this.text : space}</a>
+                   <span class='btn-img'>${this.text}</span>
                 </div>
             `;
+            // <a class='nav-link ${this.text == active ? this.text == '' ? "active-link": "active-link" : ""}' href="#/${this.text != '' ? (this.text+'map') : ''}">${this.text != '' ? this.text : space}</a>
             //el.addEventListener('click',this.onButtonClick)
             super.renderInternal(el, doc);
         }

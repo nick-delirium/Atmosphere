@@ -58,15 +58,14 @@ mounted() {
       this.median.no2 = obj.no2/query.length;
       this.median.so2 = obj.so2/query.length;
       
-        var platform = new H.service.Platform({
+
+        /* Creating map */
+        let platform = new H.service.Platform({
           'app_id': 'xxkQMf84Rb3cKA0fF8Du',
           'app_code': '3oHkXZJOAtM3jtOvDuGd0g' 
         });
-        //var for layers
-        var defaultLayers = platform.createDefaultLayers({lg: 'rus'});
-
-        //greated map
-        var map = new H.Map(
+        let defaultLayers = platform.createDefaultLayers({lg: 'rus'});
+        let map = new H.Map(
           document.getElementById('mapContainer'),
           defaultLayers.normal.map,
           {
@@ -75,25 +74,30 @@ mounted() {
           }
         );
 
-        //add standard event map
-        var mapEvents = new H.mapevents.MapEvents(map);
-        var behavior = new H.mapevents.Behavior(mapEvents);
+        /* Adding standard event map */
+        let mapEvents = new H.mapevents.MapEvents(map);
+        let behavior = new H.mapevents.Behavior(mapEvents);
 
-        //map UI
-        var ui = H.ui.UI.createDefault(map, defaultLayers, 'ru-RU');
-        var mapSettings = ui.getControl('mapsettings');
-        var zoom = ui.getControl('zoom');
-        var scalebar = ui.getControl('scalebar');
+        /* Map UI */
+        let ui = H.ui.UI.createDefault(map, defaultLayers, 'ru-RU');
+        let mapSettings = ui.getControl('mapsettings');
+        let zoom = ui.getControl('zoom');
+        let scalebar = ui.getControl('scalebar');
         
         mapSettings.setAlignment('top-right');
         zoom.setAlignment('middle-right');
         scalebar.setAlignment('top-right');
         
+        const types = ['All', 'No', 'No2', 'Co', 'So2'];
           
-        //groups buttons 
+        /* Creation of buttons */
         const buttonNo = new Button('NO', 'NO');
         buttonNo.setAlignment('top-left');
         ui.addControl('buttonNo',buttonNo);
+        document.querySelector('.NO').addEventListener('click', ()=>{
+          document.querySelector('.NO').classList.add('dl-button-active');
+          groupNo.setVisibility(true);
+        })
         
         const buttonSo2 = new Button('SO2', 'SO2');
         buttonSo2.setAlignment('top-left');
@@ -124,72 +128,86 @@ mounted() {
             "summary": (parseFloat(pollution[i].no2.replace(/,/, '.'))*100+parseFloat(pollution[i].no.replace(/,/, '.'))*100+parseFloat(pollution[i].so2.replace(/,/, '.'))*100+parseFloat(pollution[i].co.replace(/,/, '.'))*100)/4
           })            
         };
-        let colorsPoly = polyStyle.map(item => item.summary > 25 ? item.summary > 50 ? item.summary > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
+        let colorsPolyAll = polyStyle.map(item => item.summary > 25 ? item.summary > 50 ? item.summary > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
         let colorsPolyNo = polyStyle.map(item => item.no > 25 ? item.no > 50 ? item.no > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
         let colorsPolyNo2 = polyStyle.map(item => item.no2 > 25 ? item.no2 > 50 ? item.no2 > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
         let colorsPolyCo = polyStyle.map(item => item.co > 25 ? item.co > 50 ? item.co > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
         let colorsPolySo2 = polyStyle.map(item => item.so2 > 25 ? item.so2 > 50 ? item.so2 > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
-        
-        const jsx = 'http://localhost:8085/api/geojson'
+        let groupAll = new H.map.Group(),
+              groupNo = new H.map.Group(),
+              groupNo2 = new H.map.Group(),
+              groupCo = new H.map.Group(),
+              groupSo2 = new H.map.Group();
+        const jsx = 'http://localhost:8085/api/geojson';
+
         axios.get(jsx).then((response) => {
-           let geodata = response.data;
-          let lineString;
+          let geodata = response.data,
+              lineString, 
+              groupAll = new H.map.Group(),
+              groupNo = new H.map.Group(),
+              groupNo2 = new H.map.Group(),
+              groupCo = new H.map.Group(),
+              groupSo2 = new H.map.Group();
+              
+          // const types = ['All', 'No', 'No2', 'Co', 'So2'];
+          
           geodata.forEach((item, i, items) => {
             lineString = new H.geo.LineString()
             item.coords.forEach((item)=>{
               lineString.pushPoint(new H.geo.Point(item[1],item[0]));
             });
 
-          const polCreate = (type) => {
+          
+          /* Creation of polygones */
+          types.forEach((type, t, ts) => {
             let pol = new H.map.Polygon(lineString, {
               style: {
-                fillColor: ["colorsPoly"+type][i],
+                fillColor: eval("colorsPoly"+type)[i],
                   strokeColor: 'darkgrey',
                   lineWidth: 1.5
-                },
+              },
               data: i
               })
-          pol.addEventListener('pointerenter', function(evt) {
-            let color = evt.target.style.fillColor.slice(0, -4);
-            let opacity = '0.6)';
-            evt.target.setStyle({fillColor:color+opacity, strokeColor: 'darkgrey'});
-          });
-          pol.addEventListener('pointerleave', function(evt) {
-            let color = evt.target.style.fillColor.slice(0, -4);
-            let opacity = '0.5)';
-            evt.target.setStyle({fillColor:color+opacity, strokeColor: 'darkgrey'});
-          })
-          pol.addEventListener('tap', function(evt) {
-            let info = pollution[evt.target.getData()]
-            document.getElementById('notLots').innerHTML = `
-            <h4>${info.title}</h4>
-            <ul class='text-left'>
-              <p>Содержание вредных веществ, % от ПДК.</p>
-              <li>CO: ${info.co > 1 ? info.co+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.co} </li> <br>
-              <li>NO: ${info.no > 1 ? info.no+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.no}    </li> <br>
-              <li>NO<i><sub>2</sub></i>: ${info.no2 > 1 ? info.no2+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.no2} </li> <br>
-              <li>SO<i><sub>2</sub></i>: ${info.so2 > 1 ? info.so2+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.so2} </li> <br>
-            </ul>
-            `
-          });
+              pol.addEventListener('pointerenter', function(evt) {
+                let color = evt.target.style.fillColor.slice(0, -4);
+                let opacity = '0.6)';
+                evt.target.setStyle({fillColor:color+opacity, strokeColor: 'darkgrey'});
+              });
+              pol.addEventListener('pointerleave', function(evt) {
+                let color = evt.target.style.fillColor.slice(0, -4);
+                let opacity = '0.5)';
+                evt.target.setStyle({fillColor:color+opacity, strokeColor: 'darkgrey'});
+              })
+              pol.addEventListener('tap', function(evt) {
+                let info = pollution[evt.target.getData()]
+                document.getElementById('notLots').innerHTML = `
+                <h4>${info.title}</h4>
+                <ul class='text-left'>
+                  <p>Содержание вредных веществ, % от ПДК.</p>
+                  <li>CO: ${info.co > 1 ? info.co+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.co} </li> <br>
+                  <li>NO: ${info.no > 1 ? info.no+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.no}    </li> <br>
+                  <li>NO<i><sub>2</sub></i>: ${info.no2 > 1 ? info.no2+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.no2} </li> <br>
+                  <li>SO<i><sub>2</sub></i>: ${info.so2 > 1 ? info.so2+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.so2} </li> <br>
+                </ul>
+                `
+              });
+              eval('group' + type).addObject(pol);
+            });
           
-          map.addObject(pol);
+          // polCreate("All");
+          
+          });
+          for (let i in types) {
+            let gr = eval('group' + types[i]);
+            gr.setVisibility(false);
+            map.addObject(gr);
           }
-
-          
-          });
         });
 
        /* Adding markers*/
           axios.get('http://localhost:8085/api/markers')
           .then(response => {
-            this.markers = response.data.data;
-            function moveToStP(map, coords){
-              //TODO: plain
-              map.setCenter({lat: coords[0].loc.lt, lng: coords[0].loc.ln});
-              map.setZoom(10);
-            }
-            
+            this.markers = response.data.data;           
             let coords = {}, marker = [], geomarker = [], bubble = [];
             for(let i = 1; i < this.markers.length; i++) {
               coords = {lat: this.markers[i].loc.lt, lng: this.markers[i].loc.ln},
@@ -202,15 +220,17 @@ mounted() {
               ui.addBubble(marker[i].bubble)
               marker[i].addEventListener('tap', function(evt) {
                 // retrieve maximum zoom level
-                var maxZoom = 14;//target.getData().maxZoom;
+                let maxZoom = 14;//target.getData().maxZoom;
                 // calculate best camera data to fit object's bounds
-                var cameraData = map.getCameraDataForBounds(evt.target.getGeometry().getBounds());
+                let cameraData = map.getCameraDataForBounds(evt.target.getGeometry().getBounds());
                 map.setZoom(Math.min(cameraData.zoom, maxZoom), true);
                 map.setCenter(cameraData.position, true); 
                 
               });
                 map.addObject(marker[i]);
             }
+
+            /* Showing popup message on marker hover */
             let hoveredObject;
             let infoBubble = new H.ui.InfoBubble({lat: 0, lng: 0}, {});
             infoBubble.addClass('gdp-info-bubble');
@@ -218,15 +238,12 @@ mounted() {
             ui.addBubble(infoBubble);
 
             map.addEventListener('pointermove', (e) => {
-              
               if(e.target != map && !e.target.getBounds){
-                
                 if (hoveredObject && hoveredObject !== e.target && e.target == map) {
                     infoBubble.close();
                 }
 
                 hoveredObject = e.target;
-                
                     let row = hoveredObject.text;
                     if (row) {
                         infoBubble.setContent(row)
