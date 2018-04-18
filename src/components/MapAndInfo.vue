@@ -88,32 +88,9 @@ mounted() {
         zoom.setAlignment('middle-right');
         scalebar.setAlignment('top-right');
         
-        const types = ['All', 'No', 'No2', 'Co', 'So2'];
+        const types = ['All', 'NO', 'NO2', 'CO', 'SO2'];
           
-        /* Creation of buttons */
-        const buttonNo = new Button('NO', 'NO');
-        buttonNo.setAlignment('top-left');
-        ui.addControl('buttonNo',buttonNo);
-        document.querySelector('.NO').addEventListener('click', ()=>{
-          document.querySelector('.NO').classList.add('dl-button-active');
-          groupNo.setVisibility(true);
-        })
-        
-        const buttonSo2 = new Button('SO2', 'SO2');
-        buttonSo2.setAlignment('top-left');
-        ui.addControl('buttonSo2',buttonSo2);
-        
-        const buttonNo2 = new Button('NO2', 'NO2');
-        buttonNo2.setAlignment('top-left');
-        ui.addControl('buttonNo2',buttonNo2);
-        
-        const buttonCo = new Button('CO', 'CO');
-        buttonCo.setAlignment('top-left');
-        ui.addControl('buttonCo',buttonCo);
-        
-        const buttonAll = new Button('All', 'All');
-        buttonCo.setAlignment('top-left');
-        ui.addControl('buttonAll',buttonAll);
+       
         
         let pollution = query;
         this.pollution = pollution;
@@ -129,25 +106,25 @@ mounted() {
           })            
         };
         let colorsPolyAll = polyStyle.map(item => item.summary > 25 ? item.summary > 50 ? item.summary > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
-        let colorsPolyNo = polyStyle.map(item => item.no > 25 ? item.no > 50 ? item.no > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
-        let colorsPolyNo2 = polyStyle.map(item => item.no2 > 25 ? item.no2 > 50 ? item.no2 > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
-        let colorsPolyCo = polyStyle.map(item => item.co > 25 ? item.co > 50 ? item.co > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
-        let colorsPolySo2 = polyStyle.map(item => item.so2 > 25 ? item.so2 > 50 ? item.so2 > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
+        let colorsPolyNO = polyStyle.map(item => item.no > 25 ? item.no > 50 ? item.no > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
+        let colorsPolyNO2 = polyStyle.map(item => item.no2 > 25 ? item.no2 > 50 ? item.no2 > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
+        let colorsPolyCO = polyStyle.map(item => item.co > 25 ? item.co > 50 ? item.co > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
+        let colorsPolySO2 = polyStyle.map(item => item.so2 > 25 ? item.so2 > 50 ? item.so2 > 75 ? "rgba(255,0,0,0.5)":"rgba(255,125,0,0.5)":"rgba(255,255,0,0.5)":"rgba(0,255,0,0.5)");
         let groupAll = new H.map.Group(),
-              groupNo = new H.map.Group(),
-              groupNo2 = new H.map.Group(),
-              groupCo = new H.map.Group(),
-              groupSo2 = new H.map.Group();
+              groupNO = new H.map.Group(),
+              groupNO2 = new H.map.Group(),
+              groupCO = new H.map.Group(),
+              groupSO2 = new H.map.Group();
         const jsx = 'http://localhost:8085/api/geojson';
 
         axios.get(jsx).then((response) => {
           let geodata = response.data,
               lineString, 
               groupAll = new H.map.Group(),
-              groupNo = new H.map.Group(),
-              groupNo2 = new H.map.Group(),
-              groupCo = new H.map.Group(),
-              groupSo2 = new H.map.Group();
+              groupNO = new H.map.Group(),
+              groupNO2 = new H.map.Group(),
+              groupCO = new H.map.Group(),
+              groupSO2 = new H.map.Group();
               
           // const types = ['All', 'No', 'No2', 'Co', 'So2'];
           
@@ -202,7 +179,72 @@ mounted() {
             gr.setVisibility(false);
             map.addObject(gr);
           }
+          /* Creation of buttons */
+          const buttonNo = new Button('NO', 'NO');
+          buttonNo.setAlignment('top-left');
+          ui.addControl('buttonNo',buttonNo);
+          document.querySelector('.NO').addEventListener('click', ()=>{
+            document.querySelector('.NO').classList.add('dl-button-active');
+            groupNO.setVisibility(true);
+            groupCO.setVisibility(false);
+            groupAll.setVisibility(false);
+            groupNO2.setVisibility(false);
+            groupSO2.setVisibility(false);
+          })
+          
+          const buttonSo2 = new Button('SO2', 'SO2');
+          buttonSo2.setAlignment('top-left');
+          ui.addControl('buttonSo2',buttonSo2);
+          document.querySelector('.SO2').addEventListener('click', ()=>{
+            document.querySelector('.SO2').classList.add('dl-button-active');
+            groupSO2.setVisibility(true);
+            groupCO.setVisibility(false);
+            groupNO.setVisibility(false);
+            groupNO2.setVisibility(false);
+            groupAll.setVisibility(false);
+          })
+          
+          const buttonNo2 = new Button('NO2', 'NO2');
+          buttonNo2.setAlignment('top-left');
+          ui.addControl('buttonNo2',buttonNo2);
+          document.querySelector('.NO2').addEventListener('click', ()=>{
+            document.querySelector('.NO2').classList.add('dl-button-active');
+            groupNO2.setVisibility(true);
+            groupCO.setVisibility(false);
+            groupNO.setVisibility(false);
+            groupAll.setVisibility(false);
+            groupSO2.setVisibility(false);
+          })
+          
+          const buttonCo = new Button('CO', 'CO');
+          buttonCo.setAlignment('top-left');
+          ui.addControl('buttonCo',buttonCo);
+          document.querySelector('.CO').addEventListener('click', ()=>{
+            document.querySelector('.CO').classList.add('dl-button-active');
+            groupCO.setVisibility(true);
+            groupAll.setVisibility(false);
+            groupNO.setVisibility(false);
+            groupNO2.setVisibility(false);
+            groupSO2.setVisibility(false);
+          })
+          
+          const buttonAll = new Button('All', 'All');
+          buttonCo.setAlignment('top-left');
+          ui.addControl('buttonAll',buttonAll);
+          document.querySelector('.All').addEventListener('click', ()=>{
+            document.querySelector('.All').classList.add('dl-button-active');
+            groupAll.setVisibility(true);
+            groupCO.setVisibility(false);
+            groupNO.setVisibility(false);
+            groupNO2.setVisibility(false);
+            groupSO2.setVisibility(false);
+            
+          })
+
+          document.querySelector('.All').classList.add('dl-button-active');
+          groupAll.setVisibility(true);
         });
+         
 
        /* Adding markers*/
           axios.get('http://localhost:8085/api/markers')

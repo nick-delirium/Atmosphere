@@ -13,7 +13,6 @@
         }
         renderInternal(el, doc) {
             this.addClass('dl-button '+this.id);
-            if(this.text == 'All') this.text = '';
             let space = 'All';
             // let href = window.location.href.split('/');
             // let active = href[href.length-1].replace(/map/, '').toUpperCase();
