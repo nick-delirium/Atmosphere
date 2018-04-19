@@ -2,7 +2,27 @@
   <div class="hello" style='margin: 0 20px'>
     <div class='row'>
       <div class='col-md-8' style='background-color:grey; padding:0!important'>
-        <div style=" height: 600px; border: 1px solid rgba(52,58,64,1)" id="mapContainer"></div>
+        <div style=" height: 600px; border: 1px solid rgba(52,58,64,1)" id="mapContainer">
+          <div class='panel dl-button' style='position: absolute; bottom: 0; right: 0; z-index: 10; padding-top: 5px; text-align: left'>
+            Превышение ПДК
+            <div>
+              <div class='legend-color' style='background-color: rgba(0,255,0,1);'></div>
+              <span>< 25%</span>
+            </div>
+            <div>
+              <div class='legend-color' style='background-color: rgba(255,255,0,1);'></div>
+              <span>25 - 50%</span>
+            </div>
+            <div>
+              <div class='legend-color' style='background-color: rgba(255,125,0,1);'></div>
+              <span>50 - 75%</span>
+            </div>
+            <div>
+              <div class='legend-color' style='background-color: rgba(255,0,0,1);'></div>
+              <span>> 75%</span>
+            </div>
+          </div>
+        </div>
         </div>
       <div class='col-md-4'>
         <div class='bubble b-top'>
@@ -152,10 +172,10 @@ mounted() {
               <h4>${info.title}</h4>
               <ul class='text-left'>
                 <p>Содержание вредных веществ, % от ПДК.</p>
-                <li>CO: ${info.co > 1 ? info.co+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.co} </li> <br>
-                <li>NO: ${info.no > 1 ? info.no+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.no}    </li> <br>
-                <li>NO<i><sub>2</sub></i>: ${info.no2 > 1 ? info.no2+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.no2} </li> <br>
-                <li>SO<i><sub>2</sub></i>: ${info.so2 > 1 ? info.so2+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":info.so2} </li> <br>
+                <li>CO: ${info.co > 1 ? Math.round(info.co*100)+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":Math.round(info.co*100)} </li> <br>
+                <li>NO: ${info.no > 1 ? Math.round(info.no*100)+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":Math.round(info.no*100)}    </li> <br>
+                <li>NO<i><sub>2</sub></i>: ${info.no2 > 1 ? Math.round(info.no2*100)+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":Math.round(info.no2*100)} </li> <br>
+                <li>SO<i><sub>2</sub></i>: ${info.so2 > 1 ? Math.round(info.so2*100)+"<span class='alert'> <i class='fas fa-exclamation'></i> Превышение ПДК</span>":Math.round(info.so2*100)} </li> <br>
               </ul>
               `
             });
@@ -391,5 +411,11 @@ a {
 .dl-button-active {
   box-shadow: 0px 0px 5px 3px #65cfb7;
 }
-
+.legend-color {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 5px;
+  margin-left: 30px;
+}
 </style>
